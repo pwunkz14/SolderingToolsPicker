@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soldering Tools Picker</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="#" class="nav-brand" onclick="showMain(); return false;">🔧 Picker</a>
+    <div class="nav-links">
+      <a href="#" id="navHome" class="nav-link active" onclick="showMain(); return false;">Home</a>
+      <a href="#" id="navAbout" class="nav-link" onclick="showAbout(); return false;">About</a>
+    </div>
+  </nav>
+
+  <div class="container" id="main-view">
+    <header>
+      <h1>🔧 Soldering Tools Solutions</h1>
+      <p></p>
+    </header>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress" style="width: 5%"></div>
+    </div>
+
+    <div class="breadcrumb" id="breadcrumb"></div>
+
+    <div id="question-area">
+      <div class="loading">Loading…</div>
+    </div>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <div class="container" id="about-view" style="display:none">
+    <div class="card about-card">
+      <h2>About this project</h2>
+      <p>
+        This site is a simple guide for <strong>newcomers and beginners</strong> who want to
+        get into electronics repair — soldering irons, hot air stations, flux, solder, and
+        console parts — without drowning in options.
+      </p>
+      <p>
+        Answer a few questions and you’ll get practical product suggestions matched to
+        what you want to work on (phones, consoles, general electronics, and more).
+      </p>
+      <p class="note">
+        <strong>Ongoing project</strong>
+		 </p>Expanding into a true all-in-one destination
+        We’re taking the next step to make this the single place people go when they need tools.
+        What’s changing:
+
+        </p> Multiple stores — We’re adding support for many more retailers so users can compare availability, pricing, and shipping in one search instead of jumping between sites.
+        </p>Bigger tools catalog — The tools list is being significantly expanded so more categories, brands, and specialized items are covered.
+        </p>Reviews & ratings — Real user reviews and ratings will be added alongside every tool, helping people make confident decisions without leaving the platform.
+
+        </p> The goal:
+        </p> Everything in one place — discover the right tool, see where it’s sold, compare options, and read honest feedback without switching tabs.
+        This moves the project from a simple directory into a complete decision-making hub for anyone looking for tools.
+      </p>
+
+      <h3>Contact</h3>
+      <p class="question-sub">Questions, suggestions, or broken links? Send a message below.</p>
+
+      <form action="https://api.web3forms.com/submit" method="POST">
+	    <input type="hidden" name="access_key" value="d4e18bb5-bda5-41ec-8c6e-b8a28ff4d2a7">
+        <label>
+          Your name
+          <input type="text" id="contact-name" name="name" required maxlength="200" placeholder="Name">
+        </label>
+		<br><br>
+        <label>
+          Your email
+          <input type="email" id="contact-email" name="email" required maxlength="300" placeholder="you@example.com">
+        </label><br><br>
+        <label>
+          Message:<br><br>
+          <textarea id="contact-message" name="message" required maxlength="20000" rows="10" placeholder="Your message…"></textarea>
+        </label><br><br>
+        <button type="submit" class="btn btn-primary">Send message</button>
+        <p id="contact-status" class="contact-status" hidden></p>
+      </form>
+    </div>
+  </div>
+
+  <button class="restart-btn" id="restartBtn" onclick="restart()">↺ Start Over</button>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1632 @@
+[
+  {
+    "id": 1,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "Geeboon",
+    "model": "TC22",
+    "power": "200W",
+    "compatibility": "4",
+    "ESD": "OK"
+  },
+  {
+    "id": 2,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "Geeboon",
+    "model": "HC24",
+    "power": "400W",
+    "compatibility": "5",
+    "ESD": "OK"
+  },
+  {
+    "id": 3,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "FNIRSI",
+    "model": "DWS-200",
+    "power": "200W",
+    "compatibility": "3",
+    "ESD": "carefull"
+  },
+  {
+    "id": 4,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "FNIRSI",
+    "model": "HS-02A",
+    "power": "100w",
+    "compatibility": "1.1",
+    "ESD": "carefull"
+  },
+  {
+    "id": 5,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "FNIRSI",
+    "model": "HS-02B",
+    "power": "100w",
+    "compatibility": "1.4",
+    "ESD": "carefull"
+  },
+  {
+    "id": 6,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "FNIRSI",
+    "model": "HS-03",
+    "power": "10w",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 7,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "FNIRSI",
+    "model": "HS-01",
+    "power": "65w",
+    "compatibility": "1.2",
+    "ESD": "carefull"
+  },
+  {
+    "id": 8,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "ALIENTEK",
+    "model": "T80",
+    "power": "100w",
+    "compatibility": "1.1",
+    "ESD": "carefull"
+  },
+  {
+    "id": 9,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "ALIENTEK",
+    "model": "T90A",
+    "power": "65W",
+    "compatibility": "1.4",
+    "ESD": "carefull"
+  },
+  {
+    "id": 10,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "ALIENTEK",
+    "model": "T90B",
+    "power": "140W",
+    "compatibility": "1.1",
+    "ESD": "carefull"
+  },
+  {
+    "id": 11,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "AIFEN",
+    "model": "A11",
+    "power": "75W",
+    "compatibility": "1.4",
+    "ESD": "carefull"
+  },
+  {
+    "id": 12,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "ANENG",
+    "model": "SL108",
+    "power": "96w",
+    "compatibility": "1.2",
+    "ESD": "carefull"
+  },
+  {
+    "id": 13,
+    "category": "tools",
+    "sub_category": "iron",
+    "brand": "JCD",
+    "model": "",
+    "power": "80w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 14,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "SEQURE",
+    "model": "SI012 Pro Max",
+    "power": "100w",
+    "compatibility": "1.2",
+    "ESD": "carefull"
+  },
+  {
+    "id": 15,
+    "category": "tools",
+    "sub_category": "portable",
+    "brand": "MINIWARE",
+    "model": "TS21",
+    "power": "100w",
+    "compatibility": "1.4",
+    "ESD": "carefull"
+  },
+  {
+    "id": 16,
+    "category": "tools",
+    "sub_category": "iron",
+    "brand": "ANENG",
+    "model": "SL106",
+    "power": "60w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 17,
+    "category": "tools",
+    "sub_category": "iron",
+    "brand": "RELIFE",
+    "model": "936",
+    "power": "90w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 18,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "PS5",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 19,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "PS4",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 20,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "Switch Pro",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 21,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "PS5",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 22,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "PS4",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 23,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "Switch Pro",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 24,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "PS5",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 25,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "PS4",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 26,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "Switch Pro",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 27,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "XBOX",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 28,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "XBOX",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 29,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "XBOX",
+    "model": "Joystick",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 30,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Geeboon",
+    "model": "T245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 31,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Geeboon",
+    "model": "T115",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 32,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Geeboon",
+    "model": "T12",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 33,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Geeboon",
+    "model": "T210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 34,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "SUGON",
+    "model": "A9",
+    "power": "200W",
+    "compatibility": "4",
+    "ESD": "OK"
+  },
+  {
+    "id": 35,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "SUGON",
+    "model": "T245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 36,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "SUGON",
+    "model": "T115",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 37,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "SUGON",
+    "model": "T12",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 38,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "SUGON",
+    "model": "T210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 39,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "AIFEN",
+    "model": "A9PRO",
+    "power": "120W",
+    "compatibility": "4",
+    "ESD": "carefull"
+  },
+  {
+    "id": 40,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "SUGON",
+    "model": "T61",
+    "power": "400W",
+    "compatibility": "6",
+    "ESD": "OK"
+  },
+  {
+    "id": 41,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "SUGON",
+    "model": "T3602",
+    "power": "240W",
+    "compatibility": "7",
+    "ESD": "OK"
+  },
+  {
+    "id": 42,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "SUGON",
+    "model": "T21",
+    "power": "120w",
+    "compatibility": "8",
+    "ESD": "OK"
+  },
+  {
+    "id": 43,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "AIXUN",
+    "model": "T3A",
+    "power": "200W",
+    "compatibility": "9",
+    "ESD": "carefull"
+  },
+  {
+    "id": 44,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "AIXUN",
+    "model": "T3B",
+    "power": "200W",
+    "compatibility": "7",
+    "ESD": "carefull"
+  },
+  {
+    "id": 45,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "AIXUN",
+    "model": "T3A",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 46,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "AIXUN",
+    "model": "T3B",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 47,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "AIXUN",
+    "model": "T3B",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 48,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "AIXUN",
+    "model": "T420D",
+    "power": "200W",
+    "compatibility": "8",
+    "ESD": "carefull"
+  },
+  {
+    "id": 49,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "OSS",
+    "model": "T12",
+    "power": "130W",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 50,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "OSS",
+    "model": "T245",
+    "power": "130W",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 51,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "OSS",
+    "model": "T210",
+    "power": "130W",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 52,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "OSS",
+    "model": "T115",
+    "power": "130W",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 53,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "FNIRSI",
+    "model": "SAG-55",
+    "power": "550W",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 54,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "AIFEN",
+    "model": "868D",
+    "power": "700w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 55,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "LUOWEI",
+    "model": "HG-01",
+    "power": "800w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 56,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "SUGON",
+    "model": "2020D",
+    "power": "700w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 57,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "RF4",
+    "model": "RF-H2",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 58,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "QUICK",
+    "model": "2008 PRO",
+    "power": "750w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 59,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "FORWARD",
+    "model": "FW-HA01",
+    "power": "800w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 60,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "YCS",
+    "model": "NO.1",
+    "power": "1200w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 61,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "MECHANIC",
+    "model": "AIRNOVA",
+    "power": "1200W",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 62,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "ATTEN",
+    "model": "ST-862D",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 63,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "SUGON",
+    "model": "8610DX-PRO",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 64,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "QUICK",
+    "model": "861DW",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 65,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "AIFEN",
+    "model": "F5PRO",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 66,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "Aixun",
+    "model": "H310D",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 67,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "YCS",
+    "model": "R1 Pro",
+    "power": "1000w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 68,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "Aixun",
+    "model": "H312",
+    "power": "1400w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 69,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "SUGON",
+    "model": "8620DX PRO",
+    "power": "1300w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 70,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "SUGON",
+    "model": "8650Pro",
+    "power": "1300w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 71,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "QUICK",
+    "model": "861 Pro",
+    "power": "1300w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 72,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "YCS",
+    "model": "R1 Ultra",
+    "power": "1450w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 73,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "Aixun",
+    "model": "H314",
+    "power": "1400w",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 74,
+    "category": "tools",
+    "sub_category": "hotair",
+    "brand": "AiXun",
+    "model": "H414D",
+    "power": "1400W",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 75,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "JBC",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 76,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "QUICKO",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 77,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "YIHUA",
+    "model": "982-I C245",
+    "power": "80W",
+    "compatibility": "1.1",
+    "ESD": "carefull"
+  },
+  {
+    "id": 78,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "YIHUA",
+    "model": "982-I C210",
+    "power": "80W",
+    "compatibility": "1.4",
+    "ESD": "carefull"
+  },
+  {
+    "id": 79,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "GEEBOON",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 80,
+    "category": "tools",
+    "sub_category": "combo",
+    "brand": "YIHUA",
+    "model": "8786D",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 81,
+    "category": "tools",
+    "sub_category": "combo",
+    "brand": "YIHUA",
+    "model": "938BD-II",
+    "power": "740w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 82,
+    "category": "tools",
+    "sub_category": "combo",
+    "brand": "unbranded",
+    "model": "8898",
+    "power": "700w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 83,
+    "category": "tools",
+    "sub_category": "combo",
+    "brand": "unbranded",
+    "model": "8586",
+    "power": "700w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 84,
+    "category": "tools",
+    "sub_category": "combo",
+    "brand": "JCB",
+    "model": "8898",
+    "power": "750W",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 85,
+    "category": "tools",
+    "sub_category": "combo",
+    "brand": "JCB",
+    "model": "8586D",
+    "power": "700w",
+    "compatibility": "1.3",
+    "ESD": "danger"
+  },
+  {
+    "id": 86,
+    "category": "tools",
+    "sub_category": "wick",
+    "brand": "Fengshengxin",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 87,
+    "category": "tools",
+    "sub_category": "wick",
+    "brand": "MECHANIC",
+    "model": "DW50",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 88,
+    "category": "tools",
+    "sub_category": "wick",
+    "brand": "YCS",
+    "model": "2015",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 89,
+    "category": "tools",
+    "sub_category": "wick",
+    "brand": "2UUL",
+    "model": "DW21",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 90,
+    "category": "tools",
+    "sub_category": "wick",
+    "brand": "2UUL",
+    "model": "DW16",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 91,
+    "category": "tools",
+    "sub_category": "wick",
+    "brand": "RELIFE",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 92,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "OSS",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 93,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "OSS",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 94,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "OSS",
+    "model": "C115",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 95,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "SIKO",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 96,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "SIKO",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 97,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "KAISI",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 98,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "KAISI",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 99,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "KAISI",
+    "model": "C115",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 100,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "GEEBOON",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 101,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "GEEBOON",
+    "model": "C115",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 102,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "MECHANIC",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 103,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "MAGMA",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 104,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "MAGMA",
+    "model": "C115",
+    "power": "",
+    "compatibility": "1.5",
+    "ESD": "OK"
+  },
+  {
+    "id": 105,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "unbranded",
+    "model": "T12",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 106,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "GEEBOON",
+    "model": "T12",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 107,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "unbranded",
+    "model": "T12",
+    "power": "",
+    "compatibility": "1.2",
+    "ESD": "OK"
+  },
+  {
+    "id": 108,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "HZY",
+    "model": "C245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 109,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "HZY",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 110,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "SUGON",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 111,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "2UUL",
+    "model": "C210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 112,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "YIHUA",
+    "model": "900M",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 113,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "MECHANIC",
+    "model": "900M",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 114,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "MECHANIC",
+    "model": "900M",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 115,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "STONEGO",
+    "model": "900M",
+    "power": "",
+    "compatibility": "1.3",
+    "ESD": "OK"
+  },
+  {
+    "id": 116,
+    "category": "tools",
+    "sub_category": "pump",
+    "brand": "JCD",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 117,
+    "category": "tools",
+    "sub_category": "pump",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 118,
+    "category": "tools",
+    "sub_category": "pump",
+    "brand": "RELIFE",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 119,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "MECHANIC",
+    "model": "M35 NANO",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 120,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "Kingbo",
+    "model": "Rma-218",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 121,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "DSUNYK",
+    "model": "NC-559-ASM",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 122,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "RELIFE",
+    "model": "HW11",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 123,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "MECHANIC",
+    "model": "UV559",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 124,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "Amtech",
+    "model": "RMA-218",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 125,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "AMAOE",
+    "model": "M53",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 126,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "RELIFE",
+    "model": "RL-403",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 127,
+    "category": "tools",
+    "sub_category": "flux",
+    "brand": "2UUL",
+    "model": "SC14",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 128,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": "GINFULL",
+    "model": "RS13",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 129,
+    "category": "parts",
+    "sub_category": "PS4",
+    "brand": "K-SILVER",
+    "model": "JS13 PRO+",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 130,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": "K-SILVER",
+    "model": "JS13 PRO+",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 131,
+    "category": "parts",
+    "sub_category": "XBOX",
+    "brand": "K-SILVER",
+    "model": "JS13 PRO+",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 132,
+    "category": "parts",
+    "sub_category": "Switch pro",
+    "brand": "K-SILVER",
+    "model": "JS13 PRO+",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 133,
+    "category": "parts",
+    "sub_category": "PS4",
+    "brand": "TMR",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 134,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": "TMR",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 135,
+    "category": "parts",
+    "sub_category": "XBOX",
+    "brand": "TMR",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 136,
+    "category": "parts",
+    "sub_category": "Switch pro",
+    "brand": "GuliKit",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 137,
+    "category": "parts",
+    "sub_category": "PS4",
+    "brand": "GuliKit",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 138,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": "GuliKit",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 139,
+    "category": "parts",
+    "sub_category": "XBOX",
+    "brand": "GuliKit",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 140,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "HDMI",
+    "ESD": "OK"
+  },
+  {
+    "id": 141,
+    "category": "parts",
+    "sub_category": "PS4",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "HDMI",
+    "ESD": "OK"
+  },
+  {
+    "id": 142,
+    "category": "parts",
+    "sub_category": "PS4",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "HDMI",
+    "ESD": "OK"
+  },
+  {
+    "id": 143,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "HDMI",
+    "ESD": "OK"
+  },
+  {
+    "id": 144,
+    "category": "parts",
+    "sub_category": "XBOX",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "HDMI",
+    "ESD": "OK"
+  },
+  {
+    "id": 145,
+    "category": "parts",
+    "sub_category": "XBOX",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "HDMI",
+    "ESD": "OK"
+  },
+  {
+    "id": 146,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": "Picofly",
+    "model": "",
+    "power": "",
+    "compatibility": "Modding",
+    "ESD": "OK"
+  },
+  {
+    "id": 147,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": "Picofly",
+    "model": "RP2040",
+    "power": "",
+    "compatibility": "Modding",
+    "ESD": "OK"
+  },
+  {
+    "id": 148,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": "unbranded",
+    "model": "",
+    "power": "",
+    "compatibility": "JOYSTICK",
+    "ESD": "OK"
+  },
+  {
+    "id": 149,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "MECHANIC",
+    "model": "HBD-366",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 150,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "MECHANIC",
+    "model": "XGZ40",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 151,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "EMA",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 152,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "RELIFE",
+    "model": "RL-440",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 153,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "BAKU",
+    "model": "",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 154,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "GEEBOON",
+    "model": "c470",
+    "power": "",
+    "compatibility": "1.6",
+    "ESD": "OK"
+  },
+  {
+    "id": 155,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "OSS",
+    "model": "c470",
+    "power": "",
+    "compatibility": "1.6",
+    "ESD": "OK"
+  },
+  {
+    "id": 156,
+    "category": "tools",
+    "sub_category": "tips",
+    "brand": "YUTO",
+    "model": "c470",
+    "power": "",
+    "compatibility": "1.6",
+    "ESD": "OK"
+  },
+  {
+    "id": 157,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "Qianli",
+    "model": "h240",
+    "power": "200W",
+    "compatibility": "4",
+    "ESD": "OK"
+  },
+  {
+    "id": 158,
+    "category": "tools",
+    "sub_category": "station",
+    "brand": "Qianli",
+    "model": "h400",
+    "power": "400w",
+    "compatibility": "5",
+    "ESD": "OK"
+  },
+  {
+    "id": 159,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Qianli",
+    "model": "T245",
+    "power": "",
+    "compatibility": "1.1",
+    "ESD": "OK"
+  },
+  {
+    "id": 160,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Qianli",
+    "model": "T210",
+    "power": "",
+    "compatibility": "1.4",
+    "ESD": "OK"
+  },
+  {
+    "id": 161,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Qianli",
+    "model": "T470",
+    "power": "",
+    "compatibility": "1.6",
+    "ESD": "OK"
+  },
+  {
+    "id": 162,
+    "category": "tools",
+    "sub_category": "solder",
+    "brand": "Mechanic",
+    "model": "HX T100",
+    "power": "",
+    "compatibility": "",
+    "ESD": "OK"
+  },
+  {
+    "id": 163,
+    "category": "tools",
+    "sub_category": "handles",
+    "brand": "Geeboon",
+    "model": "T210",
+    "power": "",
+    "compatibility": "1.6",
+    "ESD": "OK"
+  }
+]
