@@ -6,6 +6,7 @@
     "brand": "Geeboon",
     "model": "TC22",
     "power": "200W",
+    "price": "$70-130",
     "compatibility": "4",
     "ESD": "OK"
   },
@@ -16,6 +17,7 @@
     "brand": "Geeboon",
     "model": "HC24",
     "power": "400W",
+    "price": "$120-200",
     "compatibility": "5",
     "ESD": "OK"
   },
@@ -26,6 +28,7 @@
     "brand": "FNIRSI",
     "model": "DWS-200",
     "power": "200W",
+    "price": "$60-110",
     "compatibility": "3",
     "ESD": "carefull"
   },
@@ -36,6 +39,7 @@
     "brand": "FNIRSI",
     "model": "HS-02A",
     "power": "100w",
+    "price": "$40-70",
     "compatibility": "1.1",
     "ESD": "carefull"
   },
@@ -46,6 +50,7 @@
     "brand": "FNIRSI",
     "model": "HS-02B",
     "power": "100w",
+    "price": "$40-70",
     "compatibility": "1.4",
     "ESD": "carefull"
   },
@@ -56,6 +61,7 @@
     "brand": "FNIRSI",
     "model": "HS-03",
     "power": "10w",
+    "price": "$15-30",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -66,6 +72,7 @@
     "brand": "FNIRSI",
     "model": "HS-01",
     "power": "65w",
+    "price": "$40-70",
     "compatibility": "1.2",
     "ESD": "carefull"
   },
@@ -76,6 +83,7 @@
     "brand": "ALIENTEK",
     "model": "T80",
     "power": "100w",
+    "price": "$45-90",
     "compatibility": "1.1",
     "ESD": "carefull"
   },
@@ -86,6 +94,7 @@
     "brand": "ALIENTEK",
     "model": "T90A",
     "power": "65W",
+    "price": "$45-90",
     "compatibility": "1.4",
     "ESD": "carefull"
   },
@@ -96,6 +105,7 @@
     "brand": "ALIENTEK",
     "model": "T90B",
     "power": "140W",
+    "price": "$45-90",
     "compatibility": "1.1",
     "ESD": "carefull"
   },
@@ -106,6 +116,7 @@
     "brand": "AIFEN",
     "model": "A11",
     "power": "75W",
+    "price": "$35-60",
     "compatibility": "1.4",
     "ESD": "carefull"
   },
@@ -116,6 +127,7 @@
     "brand": "ANENG",
     "model": "SL108",
     "power": "96w",
+    "price": "$25-50",
     "compatibility": "1.2",
     "ESD": "carefull"
   },
@@ -126,6 +138,7 @@
     "brand": "JCD",
     "model": "",
     "power": "80w",
+    "price": "$15-35",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -136,6 +149,7 @@
     "brand": "SEQURE",
     "model": "SI012 Pro Max",
     "power": "100w",
+    "price": "$40-70",
     "compatibility": "1.2",
     "ESD": "carefull"
   },
@@ -146,6 +160,7 @@
     "brand": "MINIWARE",
     "model": "TS21",
     "power": "100w",
+    "price": "$50-85",
     "compatibility": "1.4",
     "ESD": "carefull"
   },
@@ -156,6 +171,7 @@
     "brand": "ANENG",
     "model": "SL106",
     "power": "60w",
+    "price": "$25-50",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -166,6 +182,7 @@
     "brand": "RELIFE",
     "model": "936",
     "power": "90w",
+    "price": "$15-35",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -176,6 +193,7 @@
     "brand": "PS5",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -186,6 +204,7 @@
     "brand": "PS4",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -196,6 +215,7 @@
     "brand": "Switch Pro",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -206,6 +226,7 @@
     "brand": "PS5",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -216,6 +237,7 @@
     "brand": "PS4",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -226,6 +248,7 @@
     "brand": "Switch Pro",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -236,6 +259,7 @@
     "brand": "PS5",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -246,6 +270,7 @@
     "brand": "PS4",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -256,6 +281,7 @@
     "brand": "Switch Pro",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -266,6 +292,7 @@
     "brand": "XBOX",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -276,6 +303,7 @@
     "brand": "XBOX",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -286,6 +314,7 @@
     "brand": "XBOX",
     "model": "Joystick",
     "power": "",
+    "price": "$8-20",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -296,6 +325,7 @@
     "brand": "Geeboon",
     "model": "T245",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -306,6 +336,7 @@
     "brand": "Geeboon",
     "model": "T115",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -316,6 +347,7 @@
     "brand": "Geeboon",
     "model": "T12",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -326,6 +358,7 @@
     "brand": "Geeboon",
     "model": "T210",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -336,6 +369,7 @@
     "brand": "SUGON",
     "model": "A9",
     "power": "200W",
+    "price": "$70-130",
     "compatibility": "4",
     "ESD": "OK"
   },
@@ -346,6 +380,7 @@
     "brand": "SUGON",
     "model": "T245",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -356,6 +391,7 @@
     "brand": "SUGON",
     "model": "T115",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -366,6 +402,7 @@
     "brand": "SUGON",
     "model": "T12",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -376,6 +413,7 @@
     "brand": "SUGON",
     "model": "T210",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -386,6 +424,7 @@
     "brand": "AIFEN",
     "model": "A9PRO",
     "power": "120W",
+    "price": "$50-90",
     "compatibility": "4",
     "ESD": "carefull"
   },
@@ -396,6 +435,7 @@
     "brand": "SUGON",
     "model": "T61",
     "power": "400W",
+    "price": "$120-200",
     "compatibility": "6",
     "ESD": "OK"
   },
@@ -406,6 +446,7 @@
     "brand": "SUGON",
     "model": "T3602",
     "power": "240W",
+    "price": "$70-130",
     "compatibility": "7",
     "ESD": "OK"
   },
@@ -416,6 +457,7 @@
     "brand": "SUGON",
     "model": "T21",
     "power": "120w",
+    "price": "$70-130",
     "compatibility": "8",
     "ESD": "OK"
   },
@@ -426,6 +468,7 @@
     "brand": "AIXUN",
     "model": "T3A",
     "power": "200W",
+    "price": "$90-160",
     "compatibility": "9",
     "ESD": "carefull"
   },
@@ -436,6 +479,7 @@
     "brand": "AIXUN",
     "model": "T3B",
     "power": "200W",
+    "price": "$90-160",
     "compatibility": "7",
     "ESD": "carefull"
   },
@@ -446,6 +490,7 @@
     "brand": "AIXUN",
     "model": "T3A",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -456,6 +501,7 @@
     "brand": "AIXUN",
     "model": "T3B",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -466,6 +512,7 @@
     "brand": "AIXUN",
     "model": "T3B",
     "power": "",
+    "price": "$15-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -476,6 +523,7 @@
     "brand": "AIXUN",
     "model": "T420D",
     "power": "200W",
+    "price": "$90-160",
     "compatibility": "8",
     "ESD": "carefull"
   },
@@ -486,6 +534,7 @@
     "brand": "OSS",
     "model": "T12",
     "power": "130W",
+    "price": "$35-65",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -496,6 +545,7 @@
     "brand": "OSS",
     "model": "T245",
     "power": "130W",
+    "price": "$35-65",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -506,6 +556,7 @@
     "brand": "OSS",
     "model": "T210",
     "power": "130W",
+    "price": "$35-65",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -516,6 +567,7 @@
     "brand": "OSS",
     "model": "T115",
     "power": "130W",
+    "price": "$35-65",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -526,6 +578,7 @@
     "brand": "FNIRSI",
     "model": "SAG-55",
     "power": "550W",
+    "price": "$35-70",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -536,6 +589,7 @@
     "brand": "AIFEN",
     "model": "868D",
     "power": "700w",
+    "price": "$45-90",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -546,6 +600,7 @@
     "brand": "LUOWEI",
     "model": "HG-01",
     "power": "800w",
+    "price": "$45-90",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -556,6 +611,7 @@
     "brand": "SUGON",
     "model": "2020D",
     "power": "700w",
+    "price": "$45-90",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -566,6 +622,7 @@
     "brand": "RF4",
     "model": "RF-H2",
     "power": "1000w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -576,6 +633,7 @@
     "brand": "QUICK",
     "model": "2008 PRO",
     "power": "750w",
+    "price": "$140-250",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -586,6 +644,7 @@
     "brand": "FORWARD",
     "model": "FW-HA01",
     "power": "800w",
+    "price": "$45-90",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -596,6 +655,7 @@
     "brand": "YCS",
     "model": "NO.1",
     "power": "1200w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -606,6 +666,7 @@
     "brand": "MECHANIC",
     "model": "AIRNOVA",
     "power": "1200W",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -616,6 +677,7 @@
     "brand": "ATTEN",
     "model": "ST-862D",
     "power": "1000w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -626,6 +688,7 @@
     "brand": "SUGON",
     "model": "8610DX-PRO",
     "power": "1000w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -636,6 +699,7 @@
     "brand": "QUICK",
     "model": "861DW",
     "power": "1000w",
+    "price": "$140-250",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -646,6 +710,7 @@
     "brand": "AIFEN",
     "model": "F5PRO",
     "power": "1000w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -656,6 +721,7 @@
     "brand": "Aixun",
     "model": "H310D",
     "power": "1000w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -666,6 +732,7 @@
     "brand": "YCS",
     "model": "R1 Pro",
     "power": "1000w",
+    "price": "$70-140",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -676,6 +743,7 @@
     "brand": "Aixun",
     "model": "H312",
     "power": "1400w",
+    "price": "$100-200",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -686,6 +754,7 @@
     "brand": "SUGON",
     "model": "8620DX PRO",
     "power": "1300w",
+    "price": "$100-200",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -696,6 +765,7 @@
     "brand": "SUGON",
     "model": "8650Pro",
     "power": "1300w",
+    "price": "$100-200",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -706,6 +776,7 @@
     "brand": "QUICK",
     "model": "861 Pro",
     "power": "1300w",
+    "price": "$140-250",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -716,6 +787,7 @@
     "brand": "YCS",
     "model": "R1 Ultra",
     "power": "1450w",
+    "price": "$100-200",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -726,6 +798,7 @@
     "brand": "Aixun",
     "model": "H314",
     "power": "1400w",
+    "price": "$100-200",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -736,6 +809,7 @@
     "brand": "AiXun",
     "model": "H414D",
     "power": "1400W",
+    "price": "$100-200",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -746,6 +820,7 @@
     "brand": "JBC",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -756,6 +831,7 @@
     "brand": "QUICKO",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -766,6 +842,7 @@
     "brand": "YIHUA",
     "model": "982-I C245",
     "power": "80W",
+    "price": "$40-75",
     "compatibility": "1.1",
     "ESD": "carefull"
   },
@@ -776,6 +853,7 @@
     "brand": "YIHUA",
     "model": "982-I C210",
     "power": "80W",
+    "price": "$40-75",
     "compatibility": "1.4",
     "ESD": "carefull"
   },
@@ -786,6 +864,7 @@
     "brand": "GEEBOON",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -796,6 +875,7 @@
     "brand": "YIHUA",
     "model": "8786D",
     "power": "",
+    "price": "$50-90",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -806,6 +886,7 @@
     "brand": "YIHUA",
     "model": "938BD-II",
     "power": "740w",
+    "price": "$50-90",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -816,6 +897,7 @@
     "brand": "unbranded",
     "model": "8898",
     "power": "700w",
+    "price": "$40-80",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -826,6 +908,7 @@
     "brand": "unbranded",
     "model": "8586",
     "power": "700w",
+    "price": "$40-80",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -836,6 +919,7 @@
     "brand": "JCB",
     "model": "8898",
     "power": "750W",
+    "price": "$40-80",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -846,6 +930,7 @@
     "brand": "JCB",
     "model": "8586D",
     "power": "700w",
+    "price": "$40-80",
     "compatibility": "1.3",
     "ESD": "danger"
   },
@@ -856,6 +941,7 @@
     "brand": "Fengshengxin",
     "model": "",
     "power": "",
+    "price": "$3-12",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -866,6 +952,7 @@
     "brand": "MECHANIC",
     "model": "DW50",
     "power": "",
+    "price": "$3-12",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -876,6 +963,7 @@
     "brand": "YCS",
     "model": "2015",
     "power": "",
+    "price": "$3-12",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -886,6 +974,7 @@
     "brand": "2UUL",
     "model": "DW21",
     "power": "",
+    "price": "$3-12",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -896,6 +985,7 @@
     "brand": "2UUL",
     "model": "DW16",
     "power": "",
+    "price": "$3-12",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -906,6 +996,7 @@
     "brand": "RELIFE",
     "model": "",
     "power": "",
+    "price": "$3-12",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -916,6 +1007,7 @@
     "brand": "OSS",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -926,6 +1018,7 @@
     "brand": "OSS",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -936,6 +1029,7 @@
     "brand": "OSS",
     "model": "C115",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -946,6 +1040,7 @@
     "brand": "SIKO",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -956,6 +1051,7 @@
     "brand": "SIKO",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -966,6 +1062,7 @@
     "brand": "KAISI",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -976,6 +1073,7 @@
     "brand": "KAISI",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -986,6 +1084,7 @@
     "brand": "KAISI",
     "model": "C115",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -996,6 +1095,7 @@
     "brand": "GEEBOON",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1006,6 +1106,7 @@
     "brand": "GEEBOON",
     "model": "C115",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -1016,6 +1117,7 @@
     "brand": "MECHANIC",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1026,6 +1128,7 @@
     "brand": "MAGMA",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1036,6 +1139,7 @@
     "brand": "MAGMA",
     "model": "C115",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.5",
     "ESD": "OK"
   },
@@ -1046,6 +1150,7 @@
     "brand": "unbranded",
     "model": "T12",
     "power": "",
+    "price": "$8-25",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -1056,6 +1161,7 @@
     "brand": "GEEBOON",
     "model": "T12",
     "power": "",
+    "price": "$8-25",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -1066,6 +1172,7 @@
     "brand": "unbranded",
     "model": "T12",
     "power": "",
+    "price": "$8-25",
     "compatibility": "1.2",
     "ESD": "OK"
   },
@@ -1076,6 +1183,7 @@
     "brand": "HZY",
     "model": "C245",
     "power": "",
+    "price": "$15-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -1086,6 +1194,7 @@
     "brand": "HZY",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1096,6 +1205,7 @@
     "brand": "SUGON",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1106,6 +1216,7 @@
     "brand": "2UUL",
     "model": "C210",
     "power": "",
+    "price": "$12-35",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1116,6 +1227,7 @@
     "brand": "YIHUA",
     "model": "900M",
     "power": "",
+    "price": "$5-15",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -1126,6 +1238,7 @@
     "brand": "MECHANIC",
     "model": "900M",
     "power": "",
+    "price": "$5-15",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -1136,6 +1249,7 @@
     "brand": "MECHANIC",
     "model": "900M",
     "power": "",
+    "price": "$5-15",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -1146,6 +1260,7 @@
     "brand": "STONEGO",
     "model": "900M",
     "power": "",
+    "price": "$5-15",
     "compatibility": "1.3",
     "ESD": "OK"
   },
@@ -1156,6 +1271,7 @@
     "brand": "JCD",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1166,6 +1282,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1176,6 +1293,7 @@
     "brand": "RELIFE",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1186,6 +1304,7 @@
     "brand": "MECHANIC",
     "model": "M35 NANO",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1196,6 +1315,7 @@
     "brand": "Kingbo",
     "model": "Rma-218",
     "power": "",
+    "price": "$8-20",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1206,6 +1326,7 @@
     "brand": "DSUNYK",
     "model": "NC-559-ASM",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1216,6 +1337,7 @@
     "brand": "RELIFE",
     "model": "HW11",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1226,6 +1348,7 @@
     "brand": "MECHANIC",
     "model": "UV559",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1236,6 +1359,7 @@
     "brand": "Amtech",
     "model": "RMA-218",
     "power": "",
+    "price": "$8-20",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1246,6 +1370,7 @@
     "brand": "AMAOE",
     "model": "M53",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1256,6 +1381,7 @@
     "brand": "RELIFE",
     "model": "RL-403",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1266,6 +1392,7 @@
     "brand": "2UUL",
     "model": "SC14",
     "power": "",
+    "price": "$5-15",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1276,6 +1403,7 @@
     "brand": "GINFULL",
     "model": "RS13",
     "power": "",
+    "price": "$12-30",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1286,6 +1414,7 @@
     "brand": "K-SILVER",
     "model": "JS13 PRO+",
     "power": "",
+    "price": "$12-30",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1296,6 +1425,7 @@
     "brand": "K-SILVER",
     "model": "JS13 PRO+",
     "power": "",
+    "price": "$12-30",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1306,6 +1436,7 @@
     "brand": "K-SILVER",
     "model": "JS13 PRO+",
     "power": "",
+    "price": "$12-30",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1316,6 +1447,7 @@
     "brand": "K-SILVER",
     "model": "JS13 PRO+",
     "power": "",
+    "price": "$12-30",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1326,6 +1458,7 @@
     "brand": "TMR",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1336,6 +1469,7 @@
     "brand": "TMR",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1346,6 +1480,7 @@
     "brand": "TMR",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1356,6 +1491,7 @@
     "brand": "GuliKit",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1366,6 +1502,7 @@
     "brand": "GuliKit",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1376,6 +1513,7 @@
     "brand": "GuliKit",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1386,6 +1524,7 @@
     "brand": "GuliKit",
     "model": "",
     "power": "",
+    "price": "$20-45",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1396,6 +1535,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "HDMI",
     "ESD": "OK"
   },
@@ -1406,6 +1546,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "HDMI",
     "ESD": "OK"
   },
@@ -1416,6 +1557,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "HDMI",
     "ESD": "OK"
   },
@@ -1426,6 +1568,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "HDMI",
     "ESD": "OK"
   },
@@ -1436,6 +1579,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "HDMI",
     "ESD": "OK"
   },
@@ -1446,6 +1590,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$5-15",
     "compatibility": "HDMI",
     "ESD": "OK"
   },
@@ -1456,6 +1601,7 @@
     "brand": "Picofly",
     "model": "",
     "power": "",
+    "price": "$8-25",
     "compatibility": "Modding",
     "ESD": "OK"
   },
@@ -1466,6 +1612,7 @@
     "brand": "Picofly",
     "model": "RP2040",
     "power": "",
+    "price": "$8-25",
     "compatibility": "Modding",
     "ESD": "OK"
   },
@@ -1476,6 +1623,7 @@
     "brand": "unbranded",
     "model": "",
     "power": "",
+    "price": "$8-25",
     "compatibility": "JOYSTICK",
     "ESD": "OK"
   },
@@ -1486,6 +1634,7 @@
     "brand": "MECHANIC",
     "model": "HBD-366",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1496,6 +1645,7 @@
     "brand": "MECHANIC",
     "model": "XGZ40",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1506,6 +1656,7 @@
     "brand": "EMA",
     "model": "",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1516,6 +1667,7 @@
     "brand": "RELIFE",
     "model": "RL-440",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1526,6 +1678,7 @@
     "brand": "BAKU",
     "model": "",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1536,6 +1689,7 @@
     "brand": "GEEBOON",
     "model": "c470",
     "power": "",
+    "price": "$20-45",
     "compatibility": "1.6",
     "ESD": "OK"
   },
@@ -1546,6 +1700,7 @@
     "brand": "OSS",
     "model": "c470",
     "power": "",
+    "price": "$20-45",
     "compatibility": "1.6",
     "ESD": "OK"
   },
@@ -1556,6 +1711,7 @@
     "brand": "YUTO",
     "model": "c470",
     "power": "",
+    "price": "$20-45",
     "compatibility": "1.6",
     "ESD": "OK"
   },
@@ -1566,6 +1722,7 @@
     "brand": "Qianli",
     "model": "h240",
     "power": "200W",
+    "price": "$80-140",
     "compatibility": "4",
     "ESD": "OK"
   },
@@ -1576,6 +1733,7 @@
     "brand": "Qianli",
     "model": "h400",
     "power": "400w",
+    "price": "$100-180",
     "compatibility": "5",
     "ESD": "OK"
   },
@@ -1586,6 +1744,7 @@
     "brand": "Qianli",
     "model": "T245",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.1",
     "ESD": "OK"
   },
@@ -1596,6 +1755,7 @@
     "brand": "Qianli",
     "model": "T210",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.4",
     "ESD": "OK"
   },
@@ -1606,6 +1766,7 @@
     "brand": "Qianli",
     "model": "T470",
     "power": "",
+    "price": "$25-50",
     "compatibility": "1.6",
     "ESD": "OK"
   },
@@ -1616,6 +1777,7 @@
     "brand": "Mechanic",
     "model": "HX T100",
     "power": "",
+    "price": "$5-18",
     "compatibility": "",
     "ESD": "OK"
   },
@@ -1626,6 +1788,7 @@
     "brand": "Geeboon",
     "model": "T210",
     "power": "",
+    "price": "$18-40",
     "compatibility": "1.6",
     "ESD": "OK"
   }

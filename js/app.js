@@ -336,31 +336,58 @@ function choose(nodeKey, idx) {
   }
 }
 
-function goBack() {
-  if (path.length === 0) return;
-  path.pop();
+/** Rebuild answers from current path and return the node key to show next */
+function rebuildFromPath() {
   answers = {};
   let current = "start";
   for (const p of path) {
     const node = TREE[current];
+    if (!node) break;
     const opt = node.options.find(o => o.label === p.label);
-    if (opt) {
-      answers[opt.key] = opt.val;
-      if (opt.tips) answers.tips = opt.tips;
-      current = opt.next;
-    }
+    if (!opt) break;
+    answers[opt.key] = opt.val;
+    if (opt.tips) answers.tips = opt.tips;
+    current = opt.next;
   }
+  return current;
+}
+
+function goBack() {
+  if (path.length === 0) return;
+  path.pop();
+  const current = rebuildFromPath();
   if (path.length === 0) {
     renderQuestion("start");
+  } else if (TREE[current]) {
+    renderQuestion(current);
   } else {
-    let cur = "start";
-    for (const p of path) {
-      const node = TREE[cur];
-      const opt = node.options.find(o => o.label === p.label);
-      if (opt) cur = opt.next;
-    }
-    if (TREE[cur]) renderQuestion(cur);
-    else showResults(cur);
+    showResults(current);
+  }
+}
+
+/** Jump to a previous step: keep choices before index, re-open that menu */
+function jumpToStep(index) {
+  // index -1 = home (start)
+  if (index < -1) return;
+  if (index === -1) {
+    path = [];
+    answers = {};
+    document.getElementById("results").classList.remove("active");
+    document.getElementById("results").innerHTML = "";
+    renderQuestion("start");
+    return;
+  }
+  if (index >= path.length) return;
+  // Truncate to choices before this crumb → reopen the question for this crumb
+  const targetNode = path[index].node;
+  path = path.slice(0, index);
+  rebuildFromPath();
+  document.getElementById("results").classList.remove("active");
+  document.getElementById("results").innerHTML = "";
+  if (TREE[targetNode]) {
+    renderQuestion(targetNode);
+  } else {
+    renderQuestion("start");
   }
 }
 
@@ -370,12 +397,18 @@ function updateBreadcrumb() {
     el.innerHTML = "";
     return;
   }
-  el.innerHTML = path
-    .map(
-      (p, i) =>
-        `<span class="crumb ${i === path.length - 1 ? "current" : ""}">${p.label}</span>`
-    )
-    .join("");
+  const home = `<button type="button" class="crumb crumb-btn" onclick="jumpToStep(-1)">Home</button>`;
+  const crumbs = path
+    .map((p, i) => {
+      const isLast = i === path.length - 1;
+      const label = p.label.length > 36 ? p.label.slice(0, 34) + "…" : p.label;
+      if (isLast) {
+        return `<span class="crumb current">${label}</span>`;
+      }
+      return `<button type="button" class="crumb crumb-btn" onclick="jumpToStep(${i})" title="${p.label.replace(/"/g, "&quot;")}">${label}</button>`;
+    })
+    .join(`<span class="crumb-sep">›</span>`);
+  el.innerHTML = home + `<span class="crumb-sep">›</span>` + crumbs;
 }
 
 function updateProgress() {
@@ -427,19 +460,117 @@ function getProductThumb(p) {
   return fallback;
 }
 
+/** Return list of tip system codes for a product (e.g. ["C245","C210"]) */
+function getCompatibleTipsList(p) {
+  const code = String(p.compatibility || "").trim();
+  if (!code) return [];
+  if (/joystick|hdmi|modding/i.test(code)) return [];
+  const mapped = COMPAT[code];
+  if (mapped && mapped.length) {
+    return mapped.map(t => String(t).toUpperCase());
+  }
+  const model = (p.model || "").toUpperCase();
+  if (/^(C|T)\d+|900M/.test(model)) return [model];
+  return [];
+}
+
+let activeTipFilter = null;
+
+function filterByTip(tip) {
+  tip = String(tip || "").toUpperCase();
+  // Toggle off if same tip clicked again
+  if (activeTipFilter === tip) {
+    clearTipFilter();
+    return;
+  }
+  activeTipFilter = tip;
+
+  const cards = document.querySelectorAll(".product-card[data-tips]");
+  cards.forEach(card => {
+    const tips = (card.getAttribute("data-tips") || "")
+      .split(",")
+      .map(t => t.trim().toUpperCase())
+      .filter(Boolean);
+    // Cards with no tip data (flux, wick…) stay visible but dimmed lightly
+    if (!tips.length) {
+      card.classList.add("tip-dimmed");
+      card.classList.remove("tip-match");
+      return;
+    }
+    if (tips.includes(tip)) {
+      card.classList.remove("tip-dimmed");
+      card.classList.add("tip-match");
+    } else {
+      card.classList.add("tip-dimmed");
+      card.classList.remove("tip-match");
+    }
+  });
+
+  // Highlight active tip buttons
+  document.querySelectorAll(".tag.tips[data-tip]").forEach(btn => {
+    btn.classList.toggle("tip-active", btn.getAttribute("data-tip") === tip);
+  });
+
+  updateTipFilterBar();
+}
+
+function clearTipFilter() {
+  activeTipFilter = null;
+  document.querySelectorAll(".product-card").forEach(card => {
+    card.classList.remove("tip-dimmed", "tip-match");
+  });
+  document.querySelectorAll(".tag.tips").forEach(btn => {
+    btn.classList.remove("tip-active");
+  });
+  updateTipFilterBar();
+}
+
+function updateTipFilterBar() {
+  let bar = document.getElementById("tip-filter-bar");
+  if (!activeTipFilter) {
+    if (bar) bar.remove();
+    return;
+  }
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "tip-filter-bar";
+    bar.className = "tip-filter-bar";
+    const results = document.getElementById("results");
+    if (results && results.firstChild) {
+      results.insertBefore(bar, results.firstChild);
+    } else if (results) {
+      results.appendChild(bar);
+    }
+  }
+  bar.innerHTML = `
+    <span>Showing products compatible with <strong>${activeTipFilter}</strong></span>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="clearTipFilter()">Clear filter</button>
+  `;
+}
+
 function productCard(p) {
   const name = [p.brand, p.model].filter(Boolean).join(" ");
-  const powerTag = p.power
-    ? `<div class="product-meta"><span class="tag power">${p.power}</span></div>`
+  const tipList = getCompatibleTipsList(p);
+  const tags = [];
+  if (p.power) tags.push(`<span class="tag power">${p.power}</span>`);
+  if (p.price) tags.push(`<span class="tag price">${p.price}</span>`);
+  tipList.forEach(t => {
+    tags.push(
+      `<button type="button" class="tag tips${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')" title="Filter by ${t}">${t}</button>`
+    );
+  });
+  const meta = tags.length
+    ? `<div class="product-meta">${tags.join("")}</div>`
     : "";
-  return `<div class="product-card">
+  const dataTips = tipList.length ? ` data-tips="${tipList.join(",")}"` : "";
+  return `<div class="product-card"${dataTips}>
     <div class="product-thumb">
       ${getProductThumb(p)}
     </div>
     <div class="product-body">
       <div class="product-brand">${p.brand || "—"}</div>
       <div class="product-name">${name || p.sub_category}</div>
-      ${powerTag}
+      ${meta}
       ${
         p.link
           ? `<a class="product-link" href="${p.link}" target="_blank" rel="noopener">View on AliExpress →</a>`
@@ -525,6 +656,7 @@ function solderingForRepair() {
 
 // ========== RESULT HANDLERS ==========
 function showResults(key) {
+  activeTipFilter = null;
   document.getElementById("question-area").style.display = "none";
   const res = document.getElementById("results");
   res.classList.add("active");
@@ -944,6 +1076,7 @@ function showResults(key) {
 function restart() {
   path = [];
   answers = {};
+  activeTipFilter = null;
   document.getElementById("results").classList.remove("active");
   document.getElementById("results").innerHTML = "";
   showMain();

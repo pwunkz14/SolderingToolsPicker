@@ -46,39 +46,44 @@
         Answer a few questions and you’ll get practical product suggestions matched to
         what you want to work on (phones, consoles, general electronics, and more).
       </p>
-      <p class="note">
-        <strong>Ongoing project</strong>
-		 </p>Expanding into a true all-in-one destination
+
+      <p class="affiliate-note">
+        <strong>Ongoing project</strong> — Expanding into a true all-in-one destination.
         We’re taking the next step to make this the single place people go when they need tools.
-        What’s changing:
-
-        </p> Multiple stores — We’re adding support for many more retailers so users can compare availability, pricing, and shipping in one search instead of jumping between sites.
-        </p>Bigger tools catalog — The tools list is being significantly expanded so more categories, brands, and specialized items are covered.
-        </p>Reviews & ratings — Real user reviews and ratings will be added alongside every tool, helping people make confident decisions without leaving the platform.
-
-        </p> The goal:
-        </p> Everything in one place — discover the right tool, see where it’s sold, compare options, and read honest feedback without switching tabs.
+      </p>
+      <p><strong>What’s changing:</strong></p>
+      <ul class="about-list">
+        <li><strong>Multiple stores</strong> — Support for many more retailers so users can compare availability, pricing, and shipping in one search instead of jumping between sites.</li>
+        <li><strong>Bigger tools catalog</strong> — The tools list is being significantly expanded so more categories, brands, and specialized items are covered.</li>
+        <li><strong>Reviews &amp; ratings</strong> — Real user reviews and ratings will be added alongside every tool, helping people make confident decisions without leaving the platform.</li>
+      </ul>
+      <p>
+        <strong>The goal:</strong> Everything in one place — discover the right tool, see where it’s sold,
+        compare options, and read honest feedback without switching tabs.
         This moves the project from a simple directory into a complete decision-making hub for anyone looking for tools.
+      </p>
+      <p class="affiliate-note">
+        <strong>Affiliate links:</strong> Product links on this site are affiliate links.
+        If you buy through them, a small commission may go toward keeping this project online.
+        It does not change the price you pay. Thank you for the support.
       </p>
 
       <h3>Contact</h3>
       <p class="question-sub">Questions, suggestions, or broken links? Send a message below.</p>
 
-      <form action="https://api.web3forms.com/submit" method="POST">
-	    <input type="hidden" name="access_key" value="d4e18bb5-bda5-41ec-8c6e-b8a28ff4d2a7">
+      <form id="contact-form" class="contact-form" onsubmit="submitContact(event)">
         <label>
           Your name
           <input type="text" id="contact-name" name="name" required maxlength="200" placeholder="Name">
         </label>
-		<br><br>
         <label>
           Your email
           <input type="email" id="contact-email" name="email" required maxlength="300" placeholder="you@example.com">
-        </label><br><br>
+        </label>
         <label>
-          Message:<br><br>
-          <textarea id="contact-message" name="message" required maxlength="20000" rows="10" placeholder="Your message…"></textarea>
-        </label><br><br>
+          Message
+          <textarea id="contact-message" name="message" required maxlength="20000" rows="8" placeholder="Your message…"></textarea>
+        </label>
         <button type="submit" class="btn btn-primary">Send message</button>
         <p id="contact-status" class="contact-status" hidden></p>
       </form>
