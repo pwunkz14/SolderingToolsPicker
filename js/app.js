@@ -19,7 +19,7 @@ const TREE = {
     sub: "Choose the main category",
     options: [
       { label: "Tools (Soldering, Hot Air, Flux...)", next: "tools_type", key: "main", val: "tools" },
-      { label: "Parts / Fix or build something", next: "parts_type", key: "main", val: "parts" }
+      { label: "Fix or build (FPV,Stick Drift, HDMI, Microcontrollers)", next: "parts_type", key: "main", val: "parts" }
     ]
   },
   tools_type: {
