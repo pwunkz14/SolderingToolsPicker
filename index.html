@@ -9,6 +9,12 @@
 <body>
   <nav class="top-nav">
     <a href="#" class="nav-brand" onclick="showMain(); return false;">🔧 Picker</a>
+    <div class="nav-search">
+      <input type="search" id="siteSearch" placeholder="Search products…" autocomplete="off"
+             oninput="onSearchInput(event)" onkeydown="onSearchKey(event)">
+      <button type="button" class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear" hidden>✕</button>
+      <button type="button" class="search-go" onclick="runSearch(document.getElementById('siteSearch').value)" title="Search">🔍</button>
+    </div>
     <div class="nav-links">
       <a href="#" id="navHome" class="nav-link active" onclick="showMain(); return false;">Home</a>
       <a href="#" id="navAbout" class="nav-link" onclick="showAbout(); return false;">About</a>
@@ -94,13 +100,4 @@
 
   <script src="js/app.js"></script>
 </body>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DGL5H33WF3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-DGL5H33WF3');
-</script>
 </html>
