@@ -19,7 +19,7 @@ const TREE = {
     sub: "Choose the main category",
     options: [
       { label: "Tools (Soldering, Hot Air, Flux...)", next: "tools_type", key: "main", val: "tools" },
-      { label: "Fix or build (FPV,Stick Drift, HDMI, Microcontrollers)", next: "parts_type", key: "main", val: "parts" }
+      { label: "Parts / Fix or build something", next: "parts_type", key: "main", val: "parts" }
     ]
   },
   tools_type: {
@@ -28,12 +28,79 @@ const TREE = {
     options: [
       { label: "Soldering Iron / Station", next: "iron_form", key: "tool", val: "iron" },
       { label: "Hot Air Station", next: "hotair_use", key: "tool", val: "hotair" },
+      { label: "Spot Welder", next: "spotwelder_type", key: "tool", val: "spotwelder" },
+      { label: "Measurement Tools", next: "measure_type", key: "tool", val: "measure" },
+      { label: "Power Supplies", next: "psu_voltage", key: "tool", val: "psu" },
       { label: "Flux", next: "show_flux", key: "tool", val: "flux" },
       { label: "Solder Wire", next: "show_solder", key: "tool", val: "solder" },
       { label: "Desoldering Wick", next: "show_wick", key: "tool", val: "wick" },
       { label: "Tips only", next: "tips_type", key: "tool", val: "tips" },
       { label: "Handles only", next: "handles_type", key: "tool", val: "handles" },
       { label: "Just give me the cheapest options", next: "cheapest", key: "tool", val: "cheapest" }
+    ]
+  },
+  // --- Spot Welder ---
+  spotwelder_type: {
+    q: "Spot welder — what do you need?",
+    sub: "Machine or nickel strips for battery packs",
+    options: [
+      { label: "Spot Welder Machine", next: "show_spotwelder", key: "spot", val: "machine" },
+      { label: "Nickel Strips / Tape", next: "show_stripes", key: "spot", val: "stripes" }
+    ]
+  },
+  // --- Measurement Tools ---
+  measure_type: {
+    q: "What measurement tool?",
+    sub: "Multimeters, scopes, milliohm meters and more",
+    options: [
+      { label: "Multimeter", next: "show_multimeter", key: "measure", val: "multimeter" },
+      { label: "Oscilloscope", next: "show_oscilloscope", key: "measure", val: "oscilloscope" },
+      { label: "Milliohm / Microohm meter", next: "show_milliohm", key: "measure", val: "milliohm" },
+      { label: "Battery Tester", next: "show_battery_tester", key: "measure", val: "battery_tester" },
+      { label: "LCR Meter", next: "show_lcr", key: "measure", val: "lcr" },
+      { label: "Component Tester / ESR", next: "show_component_tester", key: "measure", val: "component" },
+      { label: "Show all measurement tools", next: "show_measure_all", key: "measure", val: "all" }
+    ]
+  },
+  // --- Power Supplies (filter by voltage then current) ---
+  psu_voltage: {
+    q: "Power supply — voltage range?",
+    sub: "Choose the maximum voltage you need",
+    options: [
+      { label: "Up to 30V", next: "psu_current_30", key: "psu_v", val: "30" },
+      { label: "Up to 60V", next: "psu_current_60", key: "psu_v", val: "60" },
+      { label: "Higher / adjustable (60V+)", next: "psu_current_high", key: "psu_v", val: "high" },
+      { label: "Show all power supplies", next: "show_psu_all", key: "psu_v", val: "all" }
+    ]
+  },
+  psu_current_30: {
+    q: "Current (Amps) for ≤30V supplies?",
+    sub: "Higher current is better for motors, high-power loads",
+    options: [
+      { label: "Up to 5A", next: "show_psu_30_5", key: "psu_a", val: "5" },
+      { label: "5–10A", next: "show_psu_30_10", key: "psu_a", val: "10" },
+      { label: "Over 10A", next: "show_psu_30_high", key: "psu_a", val: "high" },
+      { label: "Any current (all ≤30V)", next: "show_psu_30_all", key: "psu_a", val: "all" }
+    ]
+  },
+  psu_current_60: {
+    q: "Current (Amps) for ≤60V supplies?",
+    sub: "Higher current is better for motors, high-power loads",
+    options: [
+      { label: "Up to 5A", next: "show_psu_60_5", key: "psu_a", val: "5" },
+      { label: "5–10A", next: "show_psu_60_10", key: "psu_a", val: "10" },
+      { label: "Over 10A", next: "show_psu_60_high", key: "psu_a", val: "high" },
+      { label: "Any current (all ≤60V)", next: "show_psu_60_all", key: "psu_a", val: "all" }
+    ]
+  },
+  psu_current_high: {
+    q: "Current for higher-voltage supplies?",
+    sub: "60V and above",
+    options: [
+      { label: "Up to 5A", next: "show_psu_high_5", key: "psu_a", val: "5" },
+      { label: "5–10A", next: "show_psu_high_10", key: "psu_a", val: "10" },
+      { label: "Over 10A", next: "show_psu_high_high", key: "psu_a", val: "high" },
+      { label: "Any current", next: "show_psu_high_all", key: "psu_a", val: "all" }
     ]
   },
   iron_form: {
@@ -104,7 +171,8 @@ const TREE = {
     q: "What do you want to fix or build?",
     sub: "Select the device / area",
     options: [
-      { label: "Consoles (Joystick, HDMI, Modding)", next: "parts_console_menu", key: "part", val: "consoles" },
+      { label: "Consoles", next: "parts_console_select", key: "part", val: "consoles" },
+      { label: "Batteries / Battery packs", next: "show_batteries", key: "part", val: "batteries" },
       { label: "Phones", next: "show_fix_phones", key: "part", val: "phones" },
       { label: "Laptop", next: "show_fix_laptop", key: "part", val: "laptop" },
       { label: "FPV", next: "show_fix_fpv", key: "part", val: "fpv" },
@@ -112,34 +180,16 @@ const TREE = {
       { label: "Microcontrollers", next: "show_fix_mcu", key: "part", val: "mcu" }
     ]
   },
-  parts_console_menu: {
-    q: "Console repair — what do you need?",
-    sub: "Joystick, HDMI port, or modding parts",
-    options: [
-      { label: "Joystick / Analog stick", next: "parts_console", key: "console_part", val: "joystick" },
-      { label: "HDMI Port", next: "parts_hdmi", key: "console_part", val: "hdmi" },
-      { label: "Switch Modding (Picofly etc.)", next: "show_modding", key: "console_part", val: "modding" }
-    ]
-  },
-  parts_console: {
+  // Console first → then what you need (Joystick / HDMI / Other / Modding)
+  parts_console_select: {
     q: "Which console?",
-    sub: "Joystick / stick replacement — includes soldering tools + special tips",
+    sub: "All parts for that console are shown together",
     options: [
-      { label: "PS5", next: "show_joystick_ps5", key: "console", val: "PS5" },
-      { label: "PS4", next: "show_joystick_ps4", key: "console", val: "PS4" },
-      { label: "Xbox", next: "show_joystick_xbox", key: "console", val: "XBOX" },
-      { label: "Switch / Switch Pro", next: "show_joystick_switch", key: "console", val: "Switch" },
-      { label: "Show all joysticks", next: "show_joystick_all", key: "console", val: "all" }
-    ]
-  },
-  parts_hdmi: {
-    q: "Which console HDMI?",
-    sub: "HDMI port replacement — includes soldering tools",
-    options: [
-      { label: "PS5", next: "show_hdmi_ps5", key: "console", val: "PS5" },
-      { label: "PS4", next: "show_hdmi_ps4", key: "console", val: "PS4" },
-      { label: "Xbox", next: "show_hdmi_xbox", key: "console", val: "XBOX" },
-      { label: "Show all HDMI", next: "show_hdmi_all", key: "console", val: "all" }
+      { label: "PS5", next: "show_console_ps5", key: "console", val: "PS5" },
+      { label: "PS4", next: "show_console_ps4", key: "console", val: "PS4" },
+      { label: "Xbox", next: "show_console_xbox", key: "console", val: "XBOX" },
+      { label: "Game Boy / GBA", next: "show_console_gameboy", key: "console", val: "GameBoy" },
+      { label: "Other consoles", next: "show_console_other", key: "console", val: "Other" }
     ]
   }
 };
@@ -205,6 +255,41 @@ function filterProducts(pred) {
 
 function bySub(...subs) {
   return filterProducts(p => p.category === "tools" && subs.includes(p.sub_category));
+}
+
+/** Any category by sub_category (tools, measure, psu, parts…) */
+function bySubAny(...subs) {
+  return filterProducts(p => subs.includes(p.sub_category));
+}
+
+/**
+ * Power supply filter.
+ * Products should use sub_category = "psu".
+ * Put voltage/current in the `power` field, e.g. "30V 5A", "0-60V 10A", "30V/5A".
+ * This parser is tolerant of common formats.
+ */
+function parsePsuSpec(p) {
+  const text = `${p.power || ""} ${p.model || ""} ${p.brand || ""}`.toUpperCase();
+  let volts = 0;
+  let amps = 0;
+  const vMatch = text.match(/(\d+)\s*V/);
+  const aMatch = text.match(/(\d+(?:\.\d+)?)\s*A/);
+  if (vMatch) volts = parseInt(vMatch[1], 10);
+  if (aMatch) amps = parseFloat(aMatch[1]);
+  return { volts, amps };
+}
+
+function psuFilter(maxVolts, minAmps, maxAmps) {
+  return filterProducts(p => {
+    if (p.sub_category !== "psu") return false;
+    const { volts, amps } = parsePsuSpec(p);
+    // If no numbers found, still show the product (better than hiding everything)
+    if (!volts && !amps) return true;
+    if (maxVolts != null && volts > maxVolts) return false;
+    if (minAmps != null && amps > 0 && amps < minAmps) return false;
+    if (maxAmps != null && amps > maxAmps) return false;
+    return true;
+  });
 }
 
 function tipsByCompat(...codes) {
@@ -282,6 +367,123 @@ function hdmiParts(consoleKey) {
     if (consoleKey === "all") return true;
     const sub = (p.sub_category || "").toUpperCase();
     return sub === consoleKey.toUpperCase() || sub.includes(consoleKey.toUpperCase());
+  });
+}
+
+/** Other console parts: buttons, flex, capacitors, etc. */
+function otherConsoleParts(consoleKey) {
+  return filterProducts(p => {
+    if (p.category !== "parts") return false;
+    const compat = (p.compatibility || "").toUpperCase();
+    const isOther =
+      compat.includes("OTHER") ||
+      compat.includes("BUTTON") ||
+      compat.includes("FLEX") ||
+      compat.includes("CAP") ||
+      compat.includes("CAPACITOR") ||
+      compat.includes("SCREEN") ||
+      compat.includes("MEMBRANE");
+    if (!isOther) return false;
+    if (consoleKey === "all") return true;
+    const sub = (p.sub_category || "").toUpperCase();
+    if (consoleKey === "Switch") return sub.includes("SWITCH");
+    if (consoleKey === "GameBoy" || consoleKey === "GAMEBOY") {
+      return sub.includes("GAMEBOY") || sub.includes("GAME BOY") || sub === "GB" || sub === "GBA";
+    }
+    if (consoleKey === "Other" || consoleKey === "OTHER") {
+      const main = ["PS5", "PS4", "XBOX", "SWITCH", "GAMEBOY", "GAME BOY", "GB", "GBA"];
+      return !main.some(m => sub === m || sub.includes(m));
+    }
+    return sub === consoleKey.toUpperCase() || sub.includes(consoleKey.toUpperCase());
+  });
+}
+
+function gameboyParts(kind) {
+  return filterProducts(p => {
+    if (p.category !== "parts") return false;
+    const sub = (p.sub_category || "").toUpperCase();
+    if (!(sub.includes("GAMEBOY") || sub.includes("GAME BOY") || sub === "GB" || sub === "GBA")) return false;
+    if (kind === "all") return true;
+    const compat = (p.compatibility || "").toUpperCase();
+    const model = (p.model || "").toUpperCase();
+    if (kind === "screen") {
+      return compat.includes("SCREEN") || model.includes("IPS") || model.includes("SCREEN");
+    }
+    if (kind === "buttons") {
+      return compat.includes("BUTTON") || compat.includes("MEMBRANE");
+    }
+    return true;
+  });
+}
+
+function otherConsoleBucketParts(kind) {
+  return filterProducts(p => {
+    if (p.category !== "parts") return false;
+    const sub = (p.sub_category || "").toUpperCase();
+    const main = ["PS5", "PS4", "XBOX", "SWITCH", "GAMEBOY", "GAME BOY", "GB", "GBA"];
+    if (main.some(m => sub === m || sub.includes(m))) return false;
+    if (kind === "all") return true;
+    const compat = (p.compatibility || "").toUpperCase();
+    if (kind === "joystick") return compat.includes("JOYSTICK");
+    if (kind === "other") {
+      return (
+        compat.includes("OTHER") ||
+        compat.includes("BUTTON") ||
+        compat.includes("FLEX") ||
+        compat.includes("CAP") ||
+        compat.includes("CAPACITOR") ||
+        compat.includes("SCREEN")
+      );
+    }
+    return true;
+  });
+}
+
+/** Generic other electronic parts (not console-specific) */
+function otherParts() {
+  return filterProducts(p => {
+    if (p.category !== "parts") return false;
+    const sub = (p.sub_category || "").toLowerCase();
+    const compat = (p.compatibility || "").toUpperCase();
+    return (
+      sub === "other" ||
+      compat.includes("OTHER") ||
+      compat.includes("BUTTON") ||
+      compat.includes("FLEX") ||
+      compat.includes("CAP") ||
+      compat.includes("CAPACITOR")
+    );
+  });
+}
+
+function batteryProducts() {
+  return filterProducts(p => p.sub_category === "battery" || (p.compatibility || "").toUpperCase().includes("BATTERY"));
+}
+
+
+/** All parts for one or more console sub_categories */
+function consolePartsBySub(...subs) {
+  const want = new Set(subs.map(s => s.toUpperCase()));
+  return filterProducts(p => {
+    if (p.category !== "parts") return false;
+    const sub = (p.sub_category || "").toUpperCase();
+    if (want.has(sub)) return true;
+    // Game Boy aliases
+    if (want.has("GAMEBOY") && (sub.includes("GAMEBOY") || sub === "GB" || sub === "GBA")) return true;
+    return false;
+  });
+}
+
+/** Parts for "other" consoles (not PS5/PS4/XBOX/GameBoy/Switch) */
+function otherConsolesParts() {
+  const main = ["PS5", "PS4", "XBOX", "SWITCH", "GAMEBOY", "GAME BOY", "GB", "GBA"];
+  return filterProducts(p => {
+    if (p.category !== "parts") return false;
+    const sub = (p.sub_category || "").toUpperCase();
+    if (!sub) return false;
+    // exclude pure battery / generic other kits that aren't consoles
+    if (sub === "BATTERY" || sub === "OTHER") return false;
+    return !main.some(m => sub === m || sub.includes(m));
   });
 }
 
@@ -568,12 +770,12 @@ function productCard(p) {
       ${getProductThumb(p)}
     </div>
     <div class="product-body">
-      <div class="product-brand">${p.brand || "—"}</div>
-      <div class="product-name">${name || p.sub_category}</div>
+      <div class="product-brand">${p.brand || p.sub_category || ""}</div>
+      <div class="product-name">${name || p.model || p.sub_category}</div>
       ${meta}
       ${
         p.link
-          ? `<a class="product-link" href="${p.link}" target="_blank" rel="noopener">View on AliExpress →</a>`
+          ? `<a class="product-link" href="${p.link}" target="_blank" rel="noopener">More Details →</a>`
           : ""
       }
     </div>
@@ -963,6 +1165,92 @@ function showResults(key) {
       html += alwaysRecommendExtras();
       break;
 
+    // --- OTHER CONSOLE PARTS (buttons, flex, caps…) ---
+    case "show_other_ps5":
+    case "show_other_ps4":
+    case "show_other_xbox":
+    case "show_other_switch":
+    case "show_other_all": {
+      const consoleMap = {
+        show_other_ps5: "PS5",
+        show_other_ps4: "PS4",
+        show_other_xbox: "XBOX",
+        show_other_switch: "Switch",
+        show_other_all: "all"
+      };
+      const consoleKey = consoleMap[key];
+      const title =
+        consoleKey === "all"
+          ? "Other Console Parts (buttons, flex, capacitors…)"
+          : `${consoleKey} — Other Parts (buttons, flex, capacitors…)`;
+      html += section(title, otherConsoleParts(consoleKey));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+    }
+
+    // --- GAME BOY ---
+    case "show_other_gameboy":
+      html += section(
+        "Game Boy — Buttons, membranes & other parts",
+        gameboyParts("all").filter(p => {
+          const c = (p.compatibility || "").toUpperCase();
+          const m = (p.model || "").toUpperCase();
+          return !(c.includes("SCREEN") || m.includes("IPS") || m.includes("SCREEN"));
+        })
+      );
+      html += solderingForRepair();
+      break;
+    case "show_screen_gameboy":
+      html += section("Game Boy — Screen / IPS kits", gameboyParts("screen"));
+      html += solderingForRepair();
+      break;
+    case "show_gameboy_all":
+      html += section("All Game Boy parts", gameboyParts("all"));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+
+    // --- OTHER CONSOLES (Dreamcast, PSP, Wii, etc.) ---
+    case "show_joystick_other":
+      html += section("Other consoles — Joysticks", otherConsoleBucketParts("joystick"));
+      html += solderingForJoystick();
+      break;
+    case "show_other_otherconsole":
+      html += section("Other consoles — Parts (buttons, flex, caps…)", otherConsoleBucketParts("other"));
+      html += solderingForRepair();
+      break;
+    case "show_otherconsole_all":
+      html += section("All other-console parts", otherConsoleBucketParts("all"));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+
+    // --- GENERIC OTHER PARTS ---
+    case "show_other_parts":
+      html += section(
+        "Other Parts (capacitors, buttons, flex cables…)",
+        otherParts(),
+        "Generic replacement parts. Use console-specific paths for PS5/PS4/Xbox/Switch parts."
+      );
+      html += alwaysRecommendExtras();
+      break;
+
+    // --- BATTERIES (includes recommended spot welder gear) ---
+    case "show_batteries":
+      html += section(
+        "Batteries / Cells (Li-ion examples)",
+        batteryProducts(),
+        "Example Li-ion and pack cells. Always follow safe charging and handling practices."
+      );
+      html += section(
+        "Recommended: Spot Welder Machines",
+        bySubAny("spotwelder"),
+        "Spot welders are commonly used to build / repair battery packs with nickel strips."
+      );
+      html += section("Nickel Strips / Tape", bySubAny("stripes"));
+      break;
+
     // --- PHONES: microsoldering focus (C115 stations, C210+C115 tips) ---
     case "show_fix_phones": {
       const stations = filterProducts(p => {
@@ -1061,6 +1349,166 @@ function showResults(key) {
       break;
     }
 
+    // ========== SPOT WELDER ==========
+    case "show_spotwelder":
+      html += section(
+        "Spot Welder Machines",
+        bySubAny("spotwelder"),
+        "Battery pack / nickel-strip spot welders. Check pulse power and electrode quality."
+      );
+      html += section(
+        "Recommended: Nickel Strips / Tape",
+        bySubAny("stripes"),
+        "Use pure nickel strips with the spot welder for battery packs."
+      );
+      break;
+    case "show_stripes":
+      html += section(
+        "Nickel Strips / Tape",
+        bySubAny("stripes"),
+        "Pure nickel or nickel-plated strips for battery packs (18650, etc.)."
+      );
+      break;
+    case "show_spotflux":
+      html += section(
+        "Flux for Spot Welding / Battery Work",
+        bySubAny("spotflux", "flux"),
+        "Flux that helps with nickel strip soldering or cleaning before welding."
+      );
+      break;
+
+    // ========== MEASUREMENT TOOLS ==========
+    case "show_multimeter":
+      html += section("Multimeters", bySubAny("multimeter"), "Digital multimeters for voltage, current, resistance, continuity.");
+      break;
+    case "show_oscilloscope":
+      html += section("Oscilloscopes", bySubAny("oscilloscope"), "Portable and benchtop scopes for signal debugging.");
+      break;
+    case "show_milliohm":
+      html += section(
+        "Milliohm / Microohm Meters",
+        bySubAny("milliohm"),
+        "Low-resistance meters — useful for battery internal resistance, PCB traces, contacts."
+      );
+      break;
+    case "show_battery_tester":
+      html += section(
+        "Battery Testers",
+        bySubAny("battery_tester"),
+        "Internal resistance / capacity testers for Li-ion, NiMH and other cells."
+      );
+      break;
+    case "show_lcr":
+      html += section("LCR Meters", bySubAny("lcr"), "Measure inductance, capacitance and resistance accurately.");
+      break;
+    case "show_component_tester":
+      html += section(
+        "Component Testers / ESR Meters",
+        bySubAny("component"),
+        "Transistor / capacitor / ESR testers — handy for quick checks."
+      );
+      break;
+    case "show_measure_all":
+      html += section("Multimeters", bySubAny("multimeter"));
+      html += section("Oscilloscopes", bySubAny("oscilloscope"));
+      html += section("Milliohm / Microohm Meters", bySubAny("milliohm"));
+      html += section("Battery Testers", bySubAny("battery_tester"));
+      html += section("LCR Meters", bySubAny("lcr"));
+      html += section("Component Testers", bySubAny("component"));
+      break;
+
+    // ========== POWER SUPPLIES ==========
+    case "show_psu_all":
+      html += section(
+        "All Power Supplies",
+        bySubAny("psu"),
+        "Tip: put voltage & current in the power column (e.g. \"30V 5A\") so filters work better."
+      );
+      break;
+    case "show_psu_30_5":
+      html += section("Power Supplies ≤30V, up to ~5A", psuFilter(30, null, 5));
+      break;
+    case "show_psu_30_10":
+      html += section("Power Supplies ≤30V, 5–10A", psuFilter(30, 5, 10));
+      break;
+    case "show_psu_30_high":
+      html += section("Power Supplies ≤30V, over 10A", psuFilter(30, 10, null));
+      break;
+    case "show_psu_30_all":
+      html += section("All Power Supplies ≤30V", psuFilter(30, null, null));
+      break;
+    case "show_psu_60_5":
+      html += section("Power Supplies ≤60V, up to ~5A", psuFilter(60, null, 5));
+      break;
+    case "show_psu_60_10":
+      html += section("Power Supplies ≤60V, 5–10A", psuFilter(60, 5, 10));
+      break;
+    case "show_psu_60_high":
+      html += section("Power Supplies ≤60V, over 10A", psuFilter(60, 10, null));
+      break;
+    case "show_psu_60_all":
+      html += section("All Power Supplies ≤60V", psuFilter(60, null, null));
+      break;
+    case "show_psu_high_5":
+      html += section("Higher-voltage PSUs (60V+), up to ~5A", filterProducts(p => {
+        if (p.sub_category !== "psu") return false;
+        const { volts, amps } = parsePsuSpec(p);
+        if (!volts) return true;
+        return volts > 60 && (amps === 0 || amps <= 5);
+      }));
+      break;
+    case "show_psu_high_10":
+      html += section("Higher-voltage PSUs (60V+), 5–10A", filterProducts(p => {
+        if (p.sub_category !== "psu") return false;
+        const { volts, amps } = parsePsuSpec(p);
+        if (!volts) return true;
+        return volts > 60 && amps >= 5 && amps <= 10;
+      }));
+      break;
+    case "show_psu_high_high":
+      html += section("Higher-voltage PSUs (60V+), over 10A", filterProducts(p => {
+        if (p.sub_category !== "psu") return false;
+        const { volts, amps } = parsePsuSpec(p);
+        if (!volts) return true;
+        return volts > 60 && amps > 10;
+      }));
+      break;
+    case "show_psu_high_all":
+      html += section("All higher-voltage Power Supplies (60V+)", filterProducts(p => {
+        if (p.sub_category !== "psu") return false;
+        const { volts } = parsePsuSpec(p);
+        return !volts || volts > 60;
+      }));
+      break;
+
+    // --- SIMPLE CONSOLE PAGES (all parts for that console) ---
+    case "show_console_ps5":
+      html += section("PS5 parts", consolePartsBySub("PS5"));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+    case "show_console_ps4":
+      html += section("PS4 parts", consolePartsBySub("PS4"));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+    case "show_console_xbox":
+      html += section("Xbox parts", consolePartsBySub("XBOX"));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+    case "show_console_gameboy":
+      html += section("Game Boy / GBA parts", consolePartsBySub("GameBoy", "GB", "GBA"));
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+    case "show_console_other":
+      html += section("Other consoles (PSP, NES, etc.)", otherConsolesParts());
+      html += solderingForRepair();
+      html += alwaysRecommendExtras();
+      break;
+
+
     default:
       html += `<div class="card"><p>No specific recommendations for this path yet.</p></div>`;
   }
@@ -1156,6 +1604,107 @@ async function submitContact(e) {
     btn.disabled = false;
   }
 }
+
+
+
+// ========== SEARCH ==========
+let searchTimer = null;
+
+function onSearchInput(e) {
+  const q = (e.target.value || "").trim();
+  const clearBtn = document.getElementById("searchClear");
+  if (clearBtn) clearBtn.hidden = !q;
+  clearTimeout(searchTimer);
+  if (!q) {
+    // don't auto-restart on every delete; only clear results if showing search
+    return;
+  }
+  searchTimer = setTimeout(() => runSearch(q), 150);
+}
+
+function onSearchKey(e) {
+  if (e.key === "Escape") {
+    clearSearch();
+    return;
+  }
+  if (e.key === "Enter") {
+    e.preventDefault();
+    clearTimeout(searchTimer);
+    runSearch((e.target.value || "").trim());
+  }
+}
+
+function clearSearch() {
+  const input = document.getElementById("siteSearch");
+  if (input) input.value = "";
+  const clearBtn = document.getElementById("searchClear");
+  if (clearBtn) clearBtn.hidden = true;
+  showMain();
+  restart();
+}
+
+function searchProducts(query) {
+  const q = query.toLowerCase().trim();
+  if (!q) return [];
+  const tokens = q.split(/\s+/).filter(Boolean);
+  return PRODUCTS.filter(p => {
+    const hay = [
+      p.brand, p.model, p.sub_category, p.category,
+      p.power, p.price, p.compatibility, String(p.id)
+    ].map(x => (x || "").toLowerCase()).join(" ");
+    return tokens.every(t => hay.includes(t));
+  });
+}
+
+function runSearch(query) {
+  query = (query || "").trim();
+  if (!query) return;
+
+  // Ensure we are on the main view
+  showMain();
+  activeTipFilter = null;
+
+  const area = document.getElementById("question-area");
+  const res = document.getElementById("results");
+  if (area) area.style.display = "none";
+  if (!res) return;
+
+  res.classList.add("active");
+  const progress = document.getElementById("progress");
+  if (progress) progress.style.width = "100%";
+  const restartBtn = document.getElementById("restartBtn");
+  if (restartBtn) restartBtn.classList.add("visible");
+
+  if (!PRODUCTS || PRODUCTS.length === 0) {
+    res.innerHTML = `<div class="empty-msg">Product database is still loading or failed to load. Wait a moment and try again.</div>`;
+    return;
+  }
+
+  const items = searchProducts(query);
+  let html = `<div class="search-hint">Search results for <strong>${escapeHtml(query)}</strong> — ${items.length} product(s)</div>`;
+  if (items.length === 0) {
+    html += `<div class="empty-msg">No products matched. Try a brand, model, or category (e.g. <em>FNIRSI</em>, <em>multimeter</em>, <em>C245</em>, <em>psu</em>).</div>`;
+  } else {
+    html += `<div class="product-grid">${items.map(productCard).join("")}</div>`;
+  }
+  html += `<div class="nav-buttons" style="margin-top:32px">
+    <button class="btn btn-secondary" onclick="clearSearch()">← Clear search</button>
+    <button class="btn btn-primary" onclick="restart()">Start Over</button>
+  </div>`;
+  res.innerHTML = html;
+
+  const bc = document.getElementById("breadcrumb");
+  if (bc) bc.innerHTML = `Search: ${escapeHtml(query)}`;
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 
 // Boot
 loadData();
