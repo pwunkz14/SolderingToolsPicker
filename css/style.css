@@ -431,10 +431,12 @@ header p { color: var(--muted); font-size: 0.95rem; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   max-width: 900px;
   margin: 0 auto;
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
 }
 
 .nav-brand {
@@ -442,11 +444,70 @@ header p { color: var(--muted); font-size: 0.95rem; }
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.nav-search {
+  position: relative;
+  flex: 1 1 160px;
+  min-width: 140px;
+  max-width: 320px;
+}
+
+.nav-search input {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.nav-search input:focus {
+  border-color: var(--accent);
+}
+
+.search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  line-height: 1;
+}
+
+.search-clear:hover { color: var(--text); }
+
+.search-go {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px;
+  line-height: 1;
+  opacity: 0.7;
+}
+.search-go:hover { opacity: 1; }
+
+.nav-search input {
+  padding-right: 52px;
 }
 
 .nav-links {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .nav-link {
@@ -460,6 +521,12 @@ header p { color: var(--muted); font-size: 0.95rem; }
 
 .nav-link:hover { color: var(--text); background: var(--card); }
 .nav-link.active { color: var(--accent); background: var(--card); }
+
+.search-hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 8px 0 16px;
+}
 
 /* About page */
 .about-card h2 {
