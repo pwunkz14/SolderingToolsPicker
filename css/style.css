@@ -315,6 +315,194 @@ header p { color: var(--muted); font-size: 0.95rem; }
   font-size: 0.85rem;
 }
 
+/* Tip system chip bar — compact */
+.tip-chip-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+}
+.tip-chip-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.tip-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.tip-chip {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.tip-chip:hover {
+  border-color: #a78bfa;
+  color: #c4b5fd;
+}
+.tip-chip.tip-active {
+  background: #5b21b6;
+  border-color: #a78bfa;
+  color: #f5f3ff;
+}
+
+/* Category chips — compact */
+.cat-chip-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+}
+.cat-chip {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.cat-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cat-chip.cat-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.sub-chip-bar,
+.power-chip-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+}
+.sub-chip,
+.power-chip {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.sub-chip:hover,
+.power-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.sub-chip.cat-active,
+.power-chip.cat-active {
+  background: #0e7490;
+  border-color: #22d3ee;
+  color: #ecfeff;
+}
+.product-card.power-dimmed,
+.product-card.psu-dimmed,
+.product-card.use-dimmed {
+  opacity: 0.28;
+  filter: grayscale(0.7);
+}
+.product-card.power-dimmed .product-link,
+.product-card.psu-dimmed .product-link,
+.product-card.use-dimmed .product-link {
+  pointer-events: none;
+}
+.psu-chip-bar,
+.use-chip-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+}
+.psu-chip,
+.use-chip {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.psu-chip:hover,
+.use-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.psu-chip.cat-active,
+.use-chip.cat-active {
+  background: #b45309;
+  border-color: #fbbf24;
+  color: #fffbeb;
+}
+.cat-chip.cat-disabled,
+.tip-chip.cat-disabled,
+.sub-chip.cat-disabled,
+.use-chip.cat-disabled {
+  opacity: 0.35;
+  filter: grayscale(0.8);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+/* Not sticky — search + breadcrumbs stay fully visible above filters */
+.filter-sticky {
+  position: relative;
+  z-index: 1;
+  background: var(--bg, #0f1419);
+  padding: 4px 0 2px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+/* Dim inactive secondary bars without removing them (no layout jump) */
+.bar-inactive {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.result-group {
+  margin-bottom: 4px;
+}
+
 .product-link {
   display: inline-block;
   background: var(--accent);
@@ -336,12 +524,18 @@ header p { color: var(--muted); font-size: 0.95rem; }
 }
 
 .breadcrumb {
+  position: sticky;
+  top: 48px;
+  z-index: 50;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px;
-  font-size: 0.85rem;
+  margin-bottom: 12px;
+  padding: 6px 0;
+  font-size: 0.8rem;
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
 }
 
 .crumb {
@@ -426,17 +620,23 @@ header p { color: var(--muted); font-size: 0.95rem; }
   .product-grid { grid-template-columns: 1fr; }
 }
 
-/* Top navigation */
+/* Top navigation — always visible above filter menus */
 .top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+  width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 14px 16px;
+  padding: 8px 16px;
   border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
+  background: var(--bg);
+  box-shadow: 0 1px 0 var(--border);
 }
 
 .nav-brand {
