@@ -359,6 +359,22 @@ header p { color: var(--muted); font-size: 0.95rem; }
   border-color: #a78bfa;
   color: #f5f3ff;
 }
+/* Special (Joystick) tip filter — distinct so it is easy to find */
+.tip-chip.tip-chip-special {
+  border-color: #f59e0b;
+  color: #fbbf24;
+  background: #1c1917;
+}
+.tip-chip.tip-chip-special:hover {
+  border-color: #fbbf24;
+  color: #fde68a;
+  background: #292524;
+}
+.tip-chip.tip-chip-special.tip-active {
+  background: #b45309;
+  border-color: #fbbf24;
+  color: #fffbeb;
+}
 
 /* Category chips — compact */
 .cat-chip-bar {
