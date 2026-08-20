@@ -2495,5 +2495,137 @@
     "price": "$3-10",
     "compatibility": "BUTTON",
     "ESD": ""
+  },
+  {
+    "id": 228,
+    "category": "parts",
+    "sub_category": "3DS",
+    "brand": null,
+    "model": "3DS / 3DS XL LL Touch Screen Connector",
+    "power": "",
+    "price": "$3-12",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 229,
+    "category": "parts",
+    "sub_category": "GameBoy",
+    "brand": null,
+    "model": "GBA SP Ports / Switch / Buttons / Sockets Kit",
+    "power": "",
+    "price": "$5-15",
+    "compatibility": "BUTTON",
+    "ESD": "OK"
+  },
+  {
+    "id": 230,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": null,
+    "model": "NS / Switch Lite FPC",
+    "power": "",
+    "price": "$3-12",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 231,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": null,
+    "model": "Switch Lite FPC Connector",
+    "power": "",
+    "price": "$3-12",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 232,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": null,
+    "model": "PS5 Ribbon Flex Cable Connector",
+    "power": "",
+    "price": "$3-12",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 233,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": null,
+    "model": "PS5 Charging Port / Earphone / Battery Contact / MIC / Touch Button",
+    "power": "",
+    "price": "$5-18",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 234,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": null,
+    "model": "PS5 Touchpad Board",
+    "power": "",
+    "price": "$8-20",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 235,
+    "category": "parts",
+    "sub_category": "XBOX",
+    "brand": null,
+    "model": "Xbox Series X Power FPC",
+    "power": "",
+    "price": "$4-15",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 236,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": null,
+    "model": "PS5 Side Board",
+    "power": "",
+    "price": "$8-25",
+    "compatibility": "FLEX",
+    "ESD": "OK"
+  },
+  {
+    "id": 237,
+    "category": "parts",
+    "sub_category": "PS5",
+    "brand": null,
+    "model": "PS5 HDMI Filters",
+    "power": "",
+    "price": "$3-10",
+    "compatibility": "CAPACITOR",
+    "ESD": "OK"
+  },
+  {
+    "id": 238,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": null,
+    "model": "Switch Buck Converters",
+    "power": "",
+    "price": "$3-12",
+    "compatibility": "OTHER",
+    "ESD": "OK"
+  },
+  {
+    "id": 239,
+    "category": "parts",
+    "sub_category": "Switch",
+    "brand": null,
+    "model": "Switch Chips (M92T36 / PI3USB30532 / BQ24193 / M92T17)",
+    "power": "",
+    "price": "$5-20",
+    "compatibility": "Modding",
+    "ESD": "OK"
   }
 ]
