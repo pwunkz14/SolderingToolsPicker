@@ -16,10 +16,10 @@ let answers = {};
 const TREE = {
   start: {
     q: "What are you looking for?",
-    sub: "Choose the main category",
+    sub: "Pick a path — or use search above anytime",
     options: [
-      { label: "Tools (Soldering, Hot Air, Flux...)", next: "tools_type", key: "main", val: "tools" },
-      { label: "Parts / Fix or build something", next: "parts_type", key: "main", val: "parts" }
+      { label: "Tools (Soldering, Hot Air, Flux...)", next: "show_tools_hub", key: "main", val: "tools" },
+      { label: "Repairs / Parts (PS5, PS4, Game Boy, batteries, screens…)", next: "show_console_repair", key: "main", val: "repairs" }
     ]
   },
   tools_type: {
@@ -31,12 +31,20 @@ const TREE = {
       { label: "Spot Welder", next: "spotwelder_type", key: "tool", val: "spotwelder" },
       { label: "Measurement Tools", next: "measure_type", key: "tool", val: "measure" },
       { label: "Power Supplies", next: "psu_voltage", key: "tool", val: "psu" },
-      { label: "Flux", next: "show_flux", key: "tool", val: "flux" },
-      { label: "Solder Wire", next: "show_solder", key: "tool", val: "solder" },
-      { label: "Desoldering Wick", next: "show_wick", key: "tool", val: "wick" },
+      { label: "Consumables (Flux, Solder, Wick)", next: "consumables_type", key: "tool", val: "consumables" },
       { label: "Tips only", next: "tips_type", key: "tool", val: "tips" },
       { label: "Handles only", next: "handles_type", key: "tool", val: "handles" },
       { label: "Just give me the cheapest options", next: "cheapest", key: "tool", val: "cheapest" }
+    ]
+  },
+  consumables_type: {
+    q: "Which consumable?",
+    sub: "Flux, solder wire or desoldering wick",
+    options: [
+      { label: "Flux", next: "show_flux", key: "consumable", val: "flux" },
+      { label: "Solder Wire", next: "show_solder", key: "consumable", val: "solder" },
+      { label: "Desoldering Wick", next: "show_wick", key: "consumable", val: "wick" },
+      { label: "Show all consumables", next: "show_consumables_all", key: "consumable", val: "all" }
     ]
   },
   // --- Spot Welder ---
@@ -105,10 +113,10 @@ const TREE = {
   },
   iron_form: {
     q: "Station or Portable?",
-    sub: "How do you prefer your soldering tool?",
+    sub: "How do you prefer your soldering tool? Filter by tip system on the next screen.",
     options: [
-      { label: "Soldering Station (bench)", next: "station_use", key: "form", val: "station" },
-      { label: "Portable / Cordless style", next: "portable_use", key: "form", val: "portable" },
+      { label: "Soldering Station (bench)", next: "show_stations_all", key: "form", val: "station" },
+      { label: "Portable / Cordless style", next: "show_portables_all", key: "form", val: "portable" },
       { label: "Classic Iron (900M style)", next: "show_iron_classic", key: "form", val: "iron" },
       { label: "2-in-1 Combo (Iron + Hot Air)", next: "show_combo", key: "form", val: "combo" }
     ]
@@ -678,8 +686,52 @@ function getCompatibleTipsList(p) {
 
 let activeTipFilter = null;
 
+/** Build a tip-system chip bar HTML (All + each code). showFor = comma list of group ids that reveal this bar. */
+function tipChipBarHTML(tipCodes, showFor) {
+  const standard = ["C245", "C210", "C115", "T12", "C470", "900M"];
+  const codes = [...new Set([
+    ...standard,
+    ...(tipCodes || []).map(t => String(t).toUpperCase()).filter(Boolean)
+  ])];
+  const order = ["C245", "C210", "C115", "T12", "C470", "900M"];
+  codes.sort((a, b) => {
+    const ia = order.indexOf(a);
+    const ib = order.indexOf(b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+  let chips = `<button type="button" class="tip-chip${!activeTipFilter ? " tip-active" : ""}" data-tip="" onclick="clearTipFilter()">All</button>`;
+  codes.forEach(t => {
+    chips += `<button type="button" class="tip-chip${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')">${t}</button>`;
+  });
+  const show = showFor || "station,portable,soldering,tips";
+  return `<div class="tip-chip-bar" id="tip-chip-bar" data-show-for="${show}" style="display:none">
+    <span class="tip-chip-label">Filter by tip system:</span>
+    <div class="tip-chip-row">${chips}</div>
+  </div>`;
+}
+
+/** Collect unique tip codes from a list of products */
+function collectTipCodes(items) {
+  const set = new Set();
+  (items || []).forEach(p => {
+    getCompatibleTipsList(p).forEach(t => set.add(t));
+  });
+  return [...set];
+}
+
 function filterByTip(tip) {
   tip = String(tip || "").toUpperCase();
+  if (NO_TIP_USE_CASES.includes(activeUseCase)) {
+    return;
+  }
+  // Greyed (incompatible for use-case) tips are not selectable
+  const allowedTips = (USE_CASE_TIPS[activeUseCase] || []).map(t => String(t).toUpperCase());
+  if (allowedTips.length && tip && !allowedTips.includes(tip)) {
+    return;
+  }
   // Toggle off if same tip clicked again
   if (activeTipFilter === tip) {
     clearTipFilter();
@@ -687,44 +739,78 @@ function filterByTip(tip) {
   }
   activeTipFilter = tip;
 
-  const cards = document.querySelectorAll(".product-card[data-tips]");
-  cards.forEach(card => {
-    const tips = (card.getAttribute("data-tips") || "")
+  // Only filter tip-related product cards; leave flux/solder/etc alone
+  document.querySelectorAll(".product-card").forEach(card => {
+    const raw = card.getAttribute("data-tips");
+    if (raw === null) {
+      // no tip data at all — keep visible (consumables, etc.)
+      card.classList.remove("tip-dimmed", "tip-match");
+      card.style.display = "";
+      return;
+    }
+    const tips = raw
       .split(",")
       .map(t => t.trim().toUpperCase())
       .filter(Boolean);
-    // Cards with no tip data (flux, wick…) stay visible but dimmed lightly
-    if (!tips.length) {
-      card.classList.add("tip-dimmed");
-      card.classList.remove("tip-match");
-      return;
-    }
     if (tips.includes(tip)) {
       card.classList.remove("tip-dimmed");
       card.classList.add("tip-match");
+      card.style.display = "";
     } else {
+      // Hide incompatible irons/stations (do not leave greyed cards in the middle)
       card.classList.add("tip-dimmed");
       card.classList.remove("tip-match");
+      card.style.display = "none";
     }
   });
 
-  // Highlight active tip buttons
+  // Highlight active tip buttons (card tags + chip bar)
   document.querySelectorAll(".tag.tips[data-tip]").forEach(btn => {
     btn.classList.toggle("tip-active", btn.getAttribute("data-tip") === tip);
   });
+  document.querySelectorAll(".tip-chip[data-tip]").forEach(btn => {
+    const bt = btn.getAttribute("data-tip") || "";
+    btn.classList.toggle("tip-active", bt === tip);
+  });
 
   updateTipFilterBar();
+  reorderProductCards();
+  updateSectionCounts();
 }
 
 function clearTipFilter() {
   activeTipFilter = null;
   document.querySelectorAll(".product-card").forEach(card => {
     card.classList.remove("tip-dimmed", "tip-match");
+    card.style.display = "";
   });
   document.querySelectorAll(".tag.tips").forEach(btn => {
     btn.classList.remove("tip-active");
   });
+  document.querySelectorAll(".tip-chip[data-tip]").forEach(btn => {
+    const bt = btn.getAttribute("data-tip") || "";
+    btn.classList.toggle("tip-active", bt === "");
+  });
   updateTipFilterBar();
+  reorderProductCards();
+  updateSectionCounts();
+}
+
+/** Update section titles like "Soldering stations (19)" to reflect visible cards */
+function updateSectionCounts() {
+  document.querySelectorAll(".result-group").forEach(section => {
+    if (section.style.display === "none") return;
+    const title = section.querySelector(".section-title, h2, h3");
+    if (!title) return;
+    const grid = section.querySelector(".product-grid");
+    if (!grid) return;
+    const visible = [...grid.querySelectorAll(".product-card")].filter(
+      c => c.style.display !== "none" && !c.classList.contains("tip-dimmed")
+    ).length;
+    const base = (title.getAttribute("data-base-title") || title.textContent || "").replace(/\s*\(\d+\)\s*$/, "").trim();
+    title.setAttribute("data-base-title", base);
+    title.textContent = visible ? `${base} (${visible})` : base;
+  });
 }
 
 function updateTipFilterBar() {
@@ -738,7 +824,10 @@ function updateTipFilterBar() {
     bar.id = "tip-filter-bar";
     bar.className = "tip-filter-bar";
     const results = document.getElementById("results");
-    if (results && results.firstChild) {
+    const chipBar = document.getElementById("tip-chip-bar");
+    if (chipBar && chipBar.nextSibling) {
+      results.insertBefore(bar, chipBar.nextSibling);
+    } else if (results && results.firstChild) {
       results.insertBefore(bar, results.firstChild);
     } else if (results) {
       results.appendChild(bar);
@@ -765,7 +854,12 @@ function productCard(p) {
     ? `<div class="product-meta">${tags.join("")}</div>`
     : "";
   const dataTips = tipList.length ? ` data-tips="${tipList.join(",")}"` : "";
-  return `<div class="product-card"${dataTips}>
+  const watts = parsePower(p.power);
+  const dataPower = watts > 0 ? ` data-power="${watts}"` : "";
+  const psuSpec = parsePsuSpec(p);
+  const dataVolts = psuSpec.volts > 0 ? ` data-volts="${psuSpec.volts}"` : "";
+  const dataAmps = psuSpec.amps > 0 ? ` data-amps="${psuSpec.amps}"` : "";
+  return `<div class="product-card"${dataTips}${dataPower}${dataVolts}${dataAmps}>
     <div class="product-thumb">
       ${getProductThumb(p)}
     </div>
@@ -782,14 +876,525 @@ function productCard(p) {
   </div>`;
 }
 
-function section(title, items, note) {
+function section(title, items, note, group, subgroup) {
+  const attrs = [];
+  if (group) attrs.push(`data-group="${group}"`);
+  if (subgroup) attrs.push(`data-subgroup="${subgroup}"`);
+  const attrStr = attrs.length ? " " + attrs.join(" ") : "";
   if (!items || items.length === 0) {
-    return `<div class="section-title">${title}</div><div class="empty-msg">No matching products found.</div>`;
+    const empty = `<div class="section-title">${title}</div><div class="empty-msg">No matching products found.</div>`;
+    return group || subgroup ? `<div class="result-group"${attrStr}>${empty}</div>` : empty;
   }
   let html = `<div class="section-title">${title} <span style="color:var(--muted);font-weight:400;font-size:0.9rem">(${items.length})</span></div>`;
   if (note) html += `<div class="note">${note}</div>`;
   html += `<div class="product-grid">${items.map(productCard).join("")}</div>`;
+  if (group || subgroup) {
+    return `<div class="result-group"${attrStr}>${html}</div>`;
+  }
   return html;
+}
+
+/** Category chips: groups = [{ id, label }] */
+function categoryChipBarHTML(groups, activeId) {
+  const active = activeId || "all";
+  let chips = `<button type="button" class="cat-chip${active === "all" ? " cat-active" : ""}" data-group="all" onclick="filterResultGroup('all')">All</button>`;
+  (groups || []).forEach(g => {
+    chips += `<button type="button" class="cat-chip${active === g.id ? " cat-active" : ""}" data-group="${g.id}" onclick="filterResultGroup('${g.id}')">${g.label}</button>`;
+  });
+  return `<div class="cat-chip-bar" id="cat-chip-bar">
+    <span class="tip-chip-label">Show:</span>
+    <div class="tip-chip-row">${chips}</div>
+  </div>`;
+}
+
+/** Secondary chips (e.g. console name under Parts) — hidden until parent category is active */
+function subChipBarHTML(parentGroup, label, items, activeId) {
+  const active = activeId || "all";
+  let chips = `<button type="button" class="sub-chip${active === "all" ? " cat-active" : ""}" data-sub="all" onclick="filterResultSubgroup('all')">All</button>`;
+  (items || []).forEach(g => {
+    chips += `<button type="button" class="sub-chip${active === g.id ? " cat-active" : ""}" data-sub="${g.id}" onclick="filterResultSubgroup('${g.id}')">${g.label}</button>`;
+  });
+  return `<div class="sub-chip-bar" id="sub-${parentGroup}" data-parent-group="${parentGroup}" style="display:none">
+    <span class="tip-chip-label">${label}:</span>
+    <div class="tip-chip-row">${chips}</div>
+  </div>`;
+}
+
+/** Power chips for hot air */
+function powerChipBarHTML() {
+  return `<div class="power-chip-bar" id="power-chip-bar" style="display:none">
+    <span class="tip-chip-label">Power:</span>
+    <div class="tip-chip-row">
+      <button type="button" class="power-chip cat-active" data-power="all" onclick="filterByPower('all')">All</button>
+      <button type="button" class="power-chip" data-power="1000" onclick="filterByPower('1000')">~1000W</button>
+      <button type="button" class="power-chip" data-power="over1000" onclick="filterByPower('over1000')">1000–1300W</button>
+      <button type="button" class="power-chip" data-power="over1300" onclick="filterByPower('over1300')">1300W+</button>
+    </div>
+  </div>`;
+}
+
+/** PSU voltage + current filters */
+function psuFilterBarHTML() {
+  return `<div class="psu-chip-bar" id="psu-chip-bar" style="display:none">
+    <span class="tip-chip-label">Voltage:</span>
+    <div class="tip-chip-row">
+      <button type="button" class="psu-chip cat-active" data-psu-v="all" onclick="filterByPsuV('all')">All</button>
+      <button type="button" class="psu-chip" data-psu-v="30" onclick="filterByPsuV('30')">≤30V</button>
+      <button type="button" class="psu-chip" data-psu-v="60" onclick="filterByPsuV('60')">≤60V</button>
+      <button type="button" class="psu-chip" data-psu-v="high" onclick="filterByPsuV('high')">60V+</button>
+    </div>
+    <span class="tip-chip-label">Current:</span>
+    <div class="tip-chip-row">
+      <button type="button" class="psu-chip cat-active" data-psu-a="all" onclick="filterByPsuA('all')">All</button>
+      <button type="button" class="psu-chip" data-psu-a="5" onclick="filterByPsuA('5')">≤5A</button>
+      <button type="button" class="psu-chip" data-psu-a="10" onclick="filterByPsuA('10')">5–10A</button>
+      <button type="button" class="psu-chip" data-psu-a="high" onclick="filterByPsuA('high')">10A+</button>
+    </div>
+  </div>`;
+}
+
+/** Use-case recommendation chips (I'm new + Tools) */
+function useCaseChipBarHTML() {
+  const cases = [
+    { id: "all", label: "All" },
+    { id: "general", label: "General / hobby" },
+    { id: "phones", label: "Phones" },
+    { id: "consoles", label: "Consoles" },
+    { id: "gpu", label: "GPU" },
+    { id: "fpv", label: "FPV" },
+    { id: "batteries", label: "Batteries" }
+  ];
+  let chips = cases.map((c, i) =>
+    `<button type="button" class="use-chip${i === 0 ? " cat-active" : ""}" data-use="${c.id}" onclick="filterByUseCase('${c.id}')">${c.label}</button>`
+  ).join("");
+  return `<div class="use-chip-bar" id="use-chip-bar">
+    <span class="tip-chip-label">Recommended for:</span>
+    <div class="tip-chip-row">${chips}</div>
+  </div>`;
+}
+
+let activeResultGroup = "all";
+let activeResultSubgroup = "all";
+let activePowerFilter = "all";
+let activePsuV = "all";
+let activePsuA = "all";
+let activeUseCase = "all";
+
+/** Which main groups to emphasize per use-case */
+const USE_CASE_GROUPS = {
+  all: null,
+  general: ["station", "portable", "iron", "combo", "hotair", "tips", "handles", "consumables"],
+  phones: ["station", "portable", "tips", "handles", "hotair", "consumables"],
+  consoles: ["station", "hotair", "tips", "handles", "consumables"],
+  gpu: ["station", "hotair", "tips", "handles", "consumables"],
+  fpv: ["station", "portable", "tips", "handles", "consumables", "spotwelder"],
+  batteries: ["spotwelder", "stripes", "measure", "psu"]
+};
+/**
+ * Tip systems allowed when a use-case is active.
+ * phones: ONLY C210 + C115
+ * consoles / gpu / fpv: all common tips EXCEPT C470
+ * batteries: no tip filter
+ */
+const USE_CASE_TIPS = {
+  general: ["C245", "T12"],
+  phones: ["C210", "C115"],
+  consoles: ["C245", "C210", "C115", "T12", "900M"],
+  gpu: ["C245", "C210", "C115", "T12", "900M"],
+  fpv: ["C245", "C210", "C115", "T12", "900M"],
+  batteries: []
+};
+const NO_TIP_USE_CASES = ["batteries"];
+/** Always selectable (never greyed out by use-case) if products exist */
+const ALWAYS_AVAILABLE_GROUPS = ["measure", "psu"];
+
+/** Groups allowed under current use-case (null = all) */
+function allowedGroups() {
+  return USE_CASE_GROUPS[activeUseCase] || null;
+}
+
+/** Does a result-group currently have at least one product card? */
+function groupHasProducts(groupId) {
+  const nodes = document.querySelectorAll(`.result-group[data-group="${groupId}"]`);
+  for (const n of nodes) {
+    if (n.querySelector(".product-card")) return true;
+  }
+  return false;
+}
+
+/** Grey out category chips that are not allowed / have no products; valid first */
+function updateCategoryChipAvailability() {
+  const allowed = allowedGroups();
+  document.querySelectorAll(".cat-chip[data-group]").forEach(btn => {
+    const g = btn.getAttribute("data-group") || "";
+    if (g === "all") {
+      btn.classList.remove("cat-disabled");
+      btn.disabled = false;
+      return;
+    }
+    const always = ALWAYS_AVAILABLE_GROUPS.includes(g);
+    const inUseCase = always || !allowed || allowed.includes(g);
+    const has = groupHasProducts(g);
+    const ok = always ? has : (inUseCase && has);
+    btn.classList.toggle("cat-disabled", !ok);
+    btn.disabled = !ok;
+  });
+  // Do NOT reorder chips — keeps menu positions stable while filtering
+}
+
+/** Show ALL tip chips; grey out ones incompatible with the use-case. Never hide tip tags on irons. */
+function updateTipChipAvailability() {
+  const preferred = (USE_CASE_TIPS[activeUseCase] || []).map(t => String(t).toUpperCase());
+  const hideTips = NO_TIP_USE_CASES.includes(activeUseCase);
+  const tipBar = document.getElementById("tip-chip-bar");
+  const barInactive = tipBar && tipBar.classList.contains("bar-inactive");
+
+  document.querySelectorAll(".tip-chip[data-tip]").forEach(btn => {
+    const tip = (btn.getAttribute("data-tip") || "").toUpperCase();
+    btn.style.display = "";
+    btn.disabled = false;
+
+    if (hideTips || barInactive) {
+      btn.classList.add("cat-disabled");
+      btn.disabled = true;
+      return;
+    }
+
+    if (!tip) {
+      btn.classList.remove("cat-disabled");
+      return;
+    }
+
+    let any = false;
+    document.querySelectorAll(".product-card[data-tips]").forEach(card => {
+      const tips = (card.getAttribute("data-tips") || "")
+        .split(",")
+        .map(t => t.trim().toUpperCase());
+      if (tips.includes(tip)) any = true;
+    });
+
+    // Recommended for use-case = enabled; others greyed but still visible
+    const allowedByUseCase = !preferred.length || preferred.includes(tip);
+    const ok = any && allowedByUseCase;
+    btn.classList.toggle("cat-disabled", !ok);
+    btn.disabled = !ok;
+  });
+  // Do NOT reorder tip chips — stable positions while filtering
+}
+
+/** Show/hide secondary filter bars (tip / power / psu / sub) — always near the top */
+function updateSecondaryFilterBars() {
+  const tipBar = document.getElementById("tip-chip-bar");
+  // Keep bars in the layout (no display:none) so the menu does not jump
+  if (tipBar) {
+    const tipGroups = (tipBar.getAttribute("data-show-for") || "station,portable,soldering,tips,handles,iron")
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+    // Tips only for soldering-related categories — grey out for Hot air, parts, batteries, etc.
+    const tipRelevant =
+      !NO_TIP_USE_CASES.includes(activeUseCase) &&
+      activeResultGroup !== "hotair" &&
+      activeResultGroup !== "psu" &&
+      activeResultGroup !== "measure" &&
+      activeResultGroup !== "screens" &&
+      activeResultGroup !== "batteries" &&
+      activeResultGroup !== "liion" &&
+      activeResultGroup !== "spotwelder" &&
+      activeResultGroup !== "stripes" &&
+      (
+        tipGroups.includes(activeResultGroup) ||
+        activeResultGroup === "all"
+      );
+    tipBar.style.display = "flex";
+    tipBar.classList.toggle("bar-inactive", !tipRelevant);
+    if (!tipRelevant) {
+      if (typeof clearTipFilter === "function" && activeTipFilter) clearTipFilter();
+      tipBar.querySelectorAll("button").forEach(b => {
+        b.disabled = true;
+      });
+    }
+  }
+
+  const powerBar = document.getElementById("power-chip-bar");
+  if (powerBar) {
+    const active = activeResultGroup === "hotair";
+    powerBar.style.display = "flex";
+    powerBar.classList.toggle("bar-inactive", !active);
+    powerBar.querySelectorAll(".power-chip").forEach(btn => {
+      btn.disabled = !active;
+      if (active) {
+        btn.classList.toggle("cat-active", (btn.getAttribute("data-power") || "") === activePowerFilter);
+      }
+    });
+  }
+
+  const psuBar = document.getElementById("psu-chip-bar");
+  if (psuBar) {
+    const active = activeResultGroup === "psu";
+    psuBar.style.display = "flex";
+    psuBar.classList.toggle("bar-inactive", !active);
+    psuBar.querySelectorAll(".psu-chip").forEach(btn => {
+      btn.disabled = !active;
+    });
+  }
+
+  document.querySelectorAll(".sub-chip-bar").forEach(bar => {
+    const parent = bar.getAttribute("data-parent-group") || "";
+    const active = activeResultGroup === parent;
+    bar.style.display = "flex";
+    bar.classList.toggle("bar-inactive", !active);
+    bar.querySelectorAll(".sub-chip").forEach(btn => {
+      btn.disabled = !active;
+      if (active) {
+        btn.classList.toggle("cat-active", (btn.getAttribute("data-sub") || "") === activeResultSubgroup);
+      }
+    });
+  });
+
+  updateTipChipAvailability();
+}
+
+function applyGroupVisibility() {
+  const allowed = allowedGroups();
+  document.querySelectorAll(".result-group").forEach(el => {
+    const g = el.getAttribute("data-group") || "";
+    const sg = el.getAttribute("data-subgroup") || "";
+    let show = true;
+    if (activeResultGroup !== "all") {
+      // Explicit category selected (including measure/psu always available)
+      show = g === activeResultGroup;
+    } else if (allowed) {
+      // Use-case "All": only groups in that use-case
+      show = allowed.includes(g);
+    }
+    // Subgroup filter (measure type, consumable type, console…)
+    if (show && activeResultSubgroup !== "all" && sg && sg !== activeResultSubgroup) {
+      show = false;
+    }
+    el.style.display = show ? "" : "none";
+  });
+}
+
+function filterResultGroup(group) {
+  const next = String(group || "all");
+  // Ignore clicks on disabled chips
+  const btn = document.querySelector(`.cat-chip[data-group="${next}"]`);
+  if (btn && btn.classList.contains("cat-disabled") && next !== "all") return;
+
+  activeResultGroup = next;
+  activeResultSubgroup = "all";
+  activePowerFilter = "all";
+  // Do NOT reset use-case — category works inside the use-case
+
+  clearTipFilter();
+  document.querySelectorAll(".product-card").forEach(c => {
+    c.classList.remove("power-dimmed", "psu-dimmed", "use-dimmed");
+  });
+
+  applyGroupVisibility();
+
+  document.querySelectorAll(".cat-chip[data-group]").forEach(b => {
+    b.classList.toggle("cat-active", (b.getAttribute("data-group") || "") === activeResultGroup);
+  });
+
+  updateCategoryChipAvailability();
+  updateSecondaryFilterBars();
+
+  // Re-apply soft tip highlight for use-case when viewing All within a use-case
+  if (activeUseCase !== "all" && activeResultGroup === "all") {
+    applyUseCaseTipHighlight();
+  }
+
+  // no scroll on category filter — prevents menu jump
+}
+
+/** Move matching (non-dimmed) product cards to the front of each grid — all menus */
+function reorderProductCards() {
+  const dimClasses = ["tip-dimmed", "psu-dimmed", "power-dimmed", "use-dimmed"];
+  document.querySelectorAll(".product-grid").forEach(grid => {
+    const cards = [...grid.querySelectorAll(".product-card")];
+    if (cards.length < 2) return;
+    const isDimmed = card => dimClasses.some(c => card.classList.contains(c));
+    const active = cards.filter(c => !isDimmed(c));
+    const dimmed = cards.filter(c => isDimmed(c));
+    // Re-append: matches first, greyed last
+    active.forEach(c => grid.appendChild(c));
+    dimmed.forEach(c => grid.appendChild(c));
+  });
+}
+
+function applyPsuCardFilter() {
+  const cards = document.querySelectorAll(".result-group[data-group='psu'] .product-card");
+  let matchCount = 0;
+  cards.forEach(card => {
+    const v = parseFloat(card.getAttribute("data-volts") || "0");
+    const a = parseFloat(card.getAttribute("data-amps") || "0");
+    let okV = true;
+    let okA = true;
+    // ≤30V / ≤60V / 60V+ (includes exactly 60V)
+    if (activePsuV === "30") okV = !v || v <= 30;
+    else if (activePsuV === "60") okV = !v || v <= 60;
+    else if (activePsuV === "high") okV = !v || v >= 60;
+    if (activePsuA === "5") okA = !a || a <= 5;
+    else if (activePsuA === "10") okA = a > 5 && a <= 10;
+    else if (activePsuA === "high") okA = a > 10;
+    const ok = okV && okA;
+    if (ok) matchCount++;
+    card.classList.toggle("psu-dimmed", !ok);
+  });
+  if ((activePsuV !== "all" || activePsuA !== "all") && matchCount === 0 && cards.length) {
+    cards.forEach(card => card.classList.remove("psu-dimmed"));
+    showFilterFallbackNote("psu", "No exact voltage/current match — showing all power supplies.");
+  } else {
+    clearFilterFallbackNote("psu");
+  }
+  reorderProductCards();
+}
+
+function filterByPsuV(val) {
+  activePsuV = String(val || "all");
+  document.querySelectorAll(".psu-chip[data-psu-v]").forEach(btn => {
+    btn.classList.toggle("cat-active", (btn.getAttribute("data-psu-v") || "") === activePsuV);
+  });
+  applyPsuCardFilter();
+}
+
+function filterByPsuA(val) {
+  activePsuA = String(val || "all");
+  document.querySelectorAll(".psu-chip[data-psu-a]").forEach(btn => {
+    btn.classList.toggle("cat-active", (btn.getAttribute("data-psu-a") || "") === activePsuA);
+  });
+  applyPsuCardFilter();
+}
+
+function applyUseCaseTipHighlight() {
+  // Do NOT hide products or tip tags on irons — tip compatibility stays visible on every card.
+  // Only the tip *filter chips* are greyed for incompatible systems.
+  document.querySelectorAll(".product-card").forEach(c => c.classList.remove("use-dimmed"));
+  document.querySelectorAll(".tag.tips[data-tip]").forEach(btn => {
+    btn.style.display = "";
+  });
+  reorderProductCards();
+}
+
+function filterByUseCase(uc) {
+  activeUseCase = String(uc || "all");
+  activeResultGroup = "all";
+  activeResultSubgroup = "all";
+  activePowerFilter = "all";
+  activePsuV = "all";
+  activePsuA = "all";
+
+  document.querySelectorAll(".use-chip[data-use]").forEach(btn => {
+    btn.classList.toggle("cat-active", (btn.getAttribute("data-use") || "") === activeUseCase);
+  });
+
+  clearTipFilter();
+  document.querySelectorAll(".product-card").forEach(c => {
+    c.classList.remove("power-dimmed", "psu-dimmed", "use-dimmed");
+  });
+
+  applyGroupVisibility();
+  updateCategoryChipAvailability();
+
+  document.querySelectorAll(".cat-chip[data-group]").forEach(btn => {
+    btn.classList.toggle("cat-active", (btn.getAttribute("data-group") || "") === "all");
+  });
+
+  // Tip compatibility highlight for this use-case (user can still click tip chips)
+  applyUseCaseTipHighlight();
+  updateSecondaryFilterBars();
+
+  // Only scroll when changing Recommended-for / opening a hub — not on every chip click
+  scrollToFilters();
+}
+
+function scrollToFilters() {
+  /**
+   * Scroll to the top of #results using document offset — never the sticky bar.
+   * When the sticky bar is pinned, getBoundingClientRect().top ≈ 0 so using it
+   * as the target leaves the user stuck mid-list.
+   */
+  const go = () => {
+    const results = document.getElementById("results");
+    if (!results) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    let y = 0;
+    let el = results;
+    while (el) {
+      y += el.offsetTop;
+      el = el.offsetParent;
+    }
+    if (!y) {
+      y = results.getBoundingClientRect().top + window.pageYOffset;
+    }
+    // Leave room for sticky search nav + breadcrumbs
+    window.scrollTo(0, Math.max(0, y - 96));
+  };
+  go();
+  requestAnimationFrame(go);
+  setTimeout(go, 40);
+  setTimeout(go, 150);
+}
+
+function filterResultSubgroup(sub) {
+  activeResultSubgroup = String(sub || "all");
+  applyGroupVisibility();
+  document.querySelectorAll(".sub-chip[data-sub]").forEach(btn => {
+    btn.classList.toggle("cat-active", (btn.getAttribute("data-sub") || "") === activeResultSubgroup);
+  });
+  updateTipChipAvailability();
+}
+
+function filterByPower(range) {
+  activePowerFilter = String(range || "all");
+  document.querySelectorAll(".power-chip[data-power]").forEach(btn => {
+    btn.classList.toggle("cat-active", (btn.getAttribute("data-power") || "") === activePowerFilter);
+  });
+  const cards = document.querySelectorAll(".result-group[data-group='hotair'] .product-card[data-power]");
+  let matchCount = 0;
+  cards.forEach(card => {
+    const w = parseFloat(card.getAttribute("data-power") || "0");
+    let match = true;
+    // Inclusive ranges so catalog values like 1300W match "1300W+"
+    if (activePowerFilter === "1000") match = w > 0 && w <= 1100;
+    else if (activePowerFilter === "over1000") match = w >= 1000 && w <= 1300;
+    else if (activePowerFilter === "over1300") match = w >= 1300;
+    if (match) matchCount++;
+    card.classList.toggle("power-dimmed", !match && activePowerFilter !== "all");
+  });
+  // Never leave an empty-looking list
+  if (activePowerFilter !== "all" && matchCount === 0 && cards.length) {
+    cards.forEach(card => card.classList.remove("power-dimmed"));
+    showFilterFallbackNote("hotair", "No exact power match — showing all hot air stations.");
+  } else {
+    clearFilterFallbackNote("hotair");
+  }
+  reorderProductCards();
+}
+
+function showFilterFallbackNote(group, text) {
+  const section = document.querySelector(`.result-group[data-group="${group}"]`);
+  if (!section) return;
+  let note = section.querySelector(".filter-fallback-note");
+  if (!note) {
+    note = document.createElement("div");
+    note.className = "note filter-fallback-note";
+    const title = section.querySelector(".section-title");
+    if (title && title.nextSibling) section.insertBefore(note, title.nextSibling);
+    else section.insertBefore(note, section.firstChild);
+  }
+  note.textContent = text;
+}
+
+function clearFilterFallbackNote(group) {
+  const sel = group
+    ? `.result-group[data-group="${group}"] .filter-fallback-note`
+    : ".filter-fallback-note";
+  document.querySelectorAll(sel).forEach(n => n.remove());
 }
 
 function alwaysRecommendExtras() {
@@ -859,6 +1464,12 @@ function solderingForRepair() {
 // ========== RESULT HANDLERS ==========
 function showResults(key) {
   activeTipFilter = null;
+  activeResultGroup = "all";
+  activeResultSubgroup = "all";
+  activePowerFilter = "all";
+  activePsuV = "all";
+  activePsuA = "all";
+  activeUseCase = "all";
   document.getElementById("question-area").style.display = "none";
   const res = document.getElementById("results");
   res.classList.add("active");
@@ -869,7 +1480,324 @@ function showResults(key) {
   let html = "";
 
   switch (key) {
-    // --- STATIONS ---
+    // --- NEW: all stations with tip filter (skips use-case questions) ---
+    case "show_stations_all": {
+      const stations = bySub("station").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const tipCodes = collectTipCodes(stations);
+      // Always show tip bar on this page
+      html += tipChipBarHTML(tipCodes, "all,station").replace('style="display:none"', 'style="display:flex"');
+      html += section(
+        "Soldering Stations",
+        stations,
+        "Click a tip system above (C245, C210…) to filter. Or open a station card and use its tip badges.",
+        "station"
+      );
+      html += section("Tips (all systems)", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"), null, "tips");
+      html += section("Handles", bySub("handles"), null, "handles");
+      html += alwaysRecommendExtras();
+      break;
+    }
+    case "show_portables_all": {
+      const portables = bySub("portable").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const tipCodes = collectTipCodes(portables);
+      html += tipChipBarHTML(tipCodes, "all,portable").replace('style="display:none"', 'style="display:flex"');
+      html += section(
+        "Portable / Cordless Irons",
+        portables,
+        "Filter by tip system using the chips above."
+      );
+      html += section("Matching Tips", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"));
+      html += alwaysRecommendExtras();
+      break;
+    }
+
+    // --- NEW: beginner starter setup ---
+    case "show_beginner": {
+      const tc22 = PRODUCTS.find(p => p.sub_category === "station" && /TC22/i.test(p.model || ""));
+      let stations = stationsCompatibleWith(["C245", "T12"]).slice().sort((a, b) => parsePower(a.power) - parsePower(b.power));
+      if (tc22) stations = [tc22, ...stations.filter(p => p.id !== tc22.id)];
+      const portables = portablesCompatibleWith(["C245", "T12"]).slice().sort((a, b) => parsePower(a.power) - parsePower(b.power));
+      const hotairs = bySub("hotair").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const classicIrons = bySub("iron");
+      const tipCodes = collectTipCodes([...stations.slice(0, 6), ...portables.slice(0, 4), ...bySub("handles")]);
+
+      html += `<div class="note" style="margin-bottom:16px">Starter kit for learning. <strong>Geeboon TC22</strong> is recommended first. Filters stay at the top — pick <strong>Recommended for</strong>, then station type / tips.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += useCaseChipBarHTML();
+      html += categoryChipBarHTML([
+        { id: "station", label: "Station" },
+        { id: "portable", label: "Portable" },
+        { id: "iron", label: "900M irons" },
+        { id: "combo", label: "Combo" },
+        { id: "hotair", label: "Hot air" },
+        { id: "spotwelder", label: "Spot welder" },
+        { id: "measure", label: "Measurement" },
+        { id: "psu", label: "Power supplies" },
+        { id: "tips", label: "Tips" },
+        { id: "handles", label: "Handles" },
+        { id: "consumables", label: "Consumables" }
+      ]);
+      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245", "T12", "C210", "900M"], "station,portable,tips,handles,iron,all");
+      html += powerChipBarHTML();
+      html += psuFilterBarHTML();
+      html += subChipBarHTML("consumables", "Type", [
+        { id: "flux", label: "Flux" },
+        { id: "solder", label: "Solder" },
+        { id: "wick", label: "Wick" }
+      ]);
+      html += subChipBarHTML("measure", "Type", [
+        { id: "multimeter", label: "Multimeter" },
+        { id: "oscilloscope", label: "Oscilloscope" },
+        { id: "milliohm", label: "Milliohm" },
+        { id: "lcr", label: "LCR" },
+        { id: "battery_tester", label: "Battery tester" }
+      ]);
+      html += `</div>`;
+
+      html += section(
+        "Recommended starter station — Geeboon TC22 first",
+        stations.slice(0, 5),
+        "TC22 listed first: C245 tips, good power, beginner-friendly price.",
+        "station"
+      );
+      html += section("Portable irons (C245 / T12)", portables.slice(0, 4), "Compact option.", "portable");
+      html += section("Classic 900M irons", classicIrons, "Budget option for simple work.", "iron");
+      html += section("2-in-1 combos", bySub("combo"), null, "combo");
+      html += section("Hot air", hotairs, "Filter by power when Hot air is selected. 1300W+ includes 1300W models.", "hotair");
+      html += section("Spot welders", bySub("spotwelder"), null, "spotwelder");
+      html += section("Nickel strips", bySub("stripes"), null, "spotwelder");
+      html += section("Multimeters", bySubAny("multimeter"), null, "measure", "multimeter");
+      html += section("Oscilloscopes", bySubAny("oscilloscope"), null, "measure", "oscilloscope");
+      html += section("Milliohm meters", bySubAny("milliohm"), null, "measure", "milliohm");
+      html += section("LCR meters", bySubAny("lcr"), null, "measure", "lcr");
+      html += section("Battery testers", bySubAny("battery_tester"), null, "measure", "battery_tester");
+      html += section("Power supplies", bySubAny("psu"), null, "psu");
+      html += section("Tips to go with it", tipsByCompat("C245", "T12", "900M").slice(0, 10), null, "tips");
+      html += section("Handles", handlesByCompat("C245", "T12", "C210"), "Filter by tip system when Handles is selected.", "handles");
+      html += section("Flux", bySub("flux"), null, "consumables", "flux");
+      html += section("Solder", bySub("solder"), null, "consumables", "solder");
+      html += section("Wick", bySub("wick"), null, "consumables", "wick");
+      setTimeout(() => {
+        updateCategoryChipAvailability();
+        updateSecondaryFilterBars();
+      }, 0);
+      break;
+    }
+
+    // --- Tools hub: filter by tool type ---
+    case "show_tools_hub": {
+      const stations = bySub("station").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const portables = bySub("portable").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const hotairs = bySub("hotair").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const classicIrons = bySub("iron");
+      const handles = bySub("handles");
+      const tipCodes = collectTipCodes([...stations, ...portables, ...handles]);
+
+      html += `<div class="note" style="margin-bottom:16px">Filters stay at the top. <strong>Recommended for</strong> greys out categories with nothing useful (e.g. no portables for GPU). Tip filter works for station type / compatibility.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += useCaseChipBarHTML();
+      html += categoryChipBarHTML([
+        { id: "station", label: "Stations" },
+        { id: "portable", label: "Portable" },
+        { id: "iron", label: "900M irons" },
+        { id: "hotair", label: "Hot air" },
+        { id: "combo", label: "Combo" },
+        { id: "spotwelder", label: "Spot welder" },
+        { id: "stripes", label: "Nickel strips" },
+        { id: "measure", label: "Measurement" },
+        { id: "psu", label: "Power supplies" },
+        { id: "tips", label: "Tips" },
+        { id: "handles", label: "Handles" },
+        { id: "consumables", label: "Consumables" }
+      ]);
+      html += tipChipBarHTML(tipCodes, "station,portable,tips,handles,iron,all");
+      html += powerChipBarHTML();
+      html += psuFilterBarHTML();
+      html += subChipBarHTML("measure", "Type", [
+        { id: "multimeter", label: "Multimeter" },
+        { id: "oscilloscope", label: "Oscilloscope" },
+        { id: "milliohm", label: "Milliohm" },
+        { id: "lcr", label: "LCR" },
+        { id: "battery_tester", label: "Battery tester" }
+      ]);
+      html += subChipBarHTML("consumables", "Type", [
+        { id: "flux", label: "Flux" },
+        { id: "solder", label: "Solder" },
+        { id: "wick", label: "Wick" },
+        { id: "pump", label: "Pump" }
+      ]);
+      html += `</div>`;
+
+      html += section("Soldering stations", stations, "Tip filter when Stations is selected.", "station");
+      html += section("Portable irons", portables, null, "portable");
+      html += section("Classic 900M irons", classicIrons, "Simple pencil-style irons.", "iron");
+      html += section("Hot air stations", hotairs, "Power filter when Hot air is selected.", "hotair");
+      html += section("2-in-1 combos", bySub("combo"), null, "combo");
+      html += section("Spot welders", bySub("spotwelder"), null, "spotwelder");
+      html += section("Nickel strips / tape", bySub("stripes"), null, "stripes");
+      html += section("Multimeters", bySubAny("multimeter"), null, "measure", "multimeter");
+      html += section("Oscilloscopes", bySubAny("oscilloscope"), null, "measure", "oscilloscope");
+      html += section("Milliohm meters", bySubAny("milliohm"), null, "measure", "milliohm");
+      html += section("LCR meters", bySubAny("lcr"), null, "measure", "lcr");
+      html += section("Battery testers", bySubAny("battery_tester"), null, "measure", "battery_tester");
+      html += section("Power supplies", bySubAny("psu"), "Voltage & current filters when PSU is selected.", "psu");
+      html += section("Tips", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"), null, "tips");
+      html += section("Handles", handles, "Tip system filter when Handles is selected.", "handles");
+      html += section("Flux", bySub("flux"), null, "consumables", "flux");
+      html += section("Solder", bySub("solder"), null, "consumables", "solder");
+      html += section("Wick", bySub("wick"), null, "consumables", "wick");
+      html += section("Desoldering pumps", bySub("pump"), null, "consumables", "pump");
+      // After render, mark unavailable categories for default "All"
+      setTimeout(() => {
+        updateCategoryChipAvailability();
+        updateSecondaryFilterBars();
+      }, 0);
+      break;
+    }
+
+    // --- Parts / build hub ---
+    case "show_parts_hub": {
+      html += `<div class="note" style="margin-bottom:16px">Parts and modules. Pick a category, then (for consoles) filter by console.</div>`;
+      html += categoryChipBarHTML([
+        { id: "consoles", label: "Consoles" },
+        { id: "batteries", label: "Batteries" },
+        { id: "phones", label: "Phones" },
+        { id: "laptop", label: "Laptop" },
+        { id: "fpv", label: "FPV" },
+        { id: "gpu", label: "GPU" },
+        { id: "mcu", label: "Microcontrollers" }
+      ]);
+      html += subChipBarHTML("consoles", "Console", [
+        { id: "ps5", label: "PS5" },
+        { id: "ps4", label: "PS4" },
+        { id: "xbox", label: "Xbox" },
+        { id: "gameboy", label: "Game Boy / GBA" },
+        { id: "switch", label: "Switch / other" }
+      ]);
+
+      html += section("PS5 parts", consolePartsBySub("PS5"), null, "consoles", "ps5");
+      html += section("PS4 parts", consolePartsBySub("PS4"), null, "consoles", "ps4");
+      html += section("Xbox parts", consolePartsBySub("XBOX"), null, "consoles", "xbox");
+      html += section("Game Boy / GBA parts", consolePartsBySub("GameBoy", "GB", "GBA"), null, "consoles", "gameboy");
+      html += section(
+        "Switch / other console parts",
+        consolePartsBySub("Switch", "Switch pro").concat(otherConsolesParts()),
+        null,
+        "consoles",
+        "switch"
+      );
+      html += section("Batteries / packs", batteryProducts(), null, "batteries");
+      html += section(
+        "Phone parts",
+        filterProducts(p => p.category === "parts" && (/phone/i.test(p.sub_category || "") || /phone/i.test(p.compatibility || ""))),
+        null,
+        "phones"
+      );
+      html += section(
+        "Laptop parts",
+        filterProducts(p => /laptop/i.test(p.sub_category || "") || /laptop/i.test(p.compatibility || "")),
+        null,
+        "laptop"
+      );
+      html += section(
+        "FPV parts",
+        filterProducts(p => /fpv/i.test(p.sub_category || "") || /fpv/i.test(p.compatibility || "")),
+        null,
+        "fpv"
+      );
+      html += section(
+        "GPU parts",
+        filterProducts(p => /gpu/i.test(p.sub_category || "") || /gpu/i.test(p.compatibility || "")),
+        null,
+        "gpu"
+      );
+      html += section(
+        "Microcontroller parts",
+        filterProducts(p => /mcu|micro/i.test(p.sub_category || "") || /mcu|arduino|esp/i.test(p.compatibility || "")),
+        null,
+        "mcu"
+      );
+      break;
+    }
+
+    // --- Repairs / Parts (consoles, batteries, screens, Li-ion) ---
+    case "show_console_repair": {
+      const heavyStations = filterProducts(p => {
+        if (p.sub_category !== "station") return false;
+        return parsePower(p.power) >= 200;
+      }).sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const hotairs = bySub("hotair").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const tipCodes = collectTipCodes(heavyStations);
+      // All cylindrical cells in catalog (18650 / 21700)
+      const liIonCells = filterProducts(p => (p.sub_category || "").toLowerCase() === "battery");
+      const screenParts = filterProducts(p => {
+        if (p.category !== "parts") return false;
+        const text = `${p.model || ""} ${p.brand || ""} ${p.compatibility || ""} ${p.sub_category || ""}`.toUpperCase();
+        return /SCREEN|LCD|IPS|OLED|DISPLAY/.test(text);
+      });
+
+      html += `<div class="note" style="margin-bottom:16px">Repairs &amp; parts — consoles, screens and Li-ion cells (18650 / 21700). Use the filters below.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([
+        { id: "ps5", label: "PS5" },
+        { id: "ps4", label: "PS4" },
+        { id: "xbox", label: "Xbox" },
+        { id: "gameboy", label: "Game Boy" },
+        { id: "switch", label: "Switch / other" },
+        { id: "screens", label: "Screens" },
+        { id: "liion", label: "Li-ion cells" },
+        { id: "soldering", label: "Soldering" },
+        { id: "hotair", label: "Hot air" },
+        { id: "tips", label: "Tips" },
+        { id: "handles", label: "Handles" },
+        { id: "consumables", label: "Flux / Solder / Wick" }
+      ]);
+      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245", "C470"], "soldering,handles,tips");
+      html += powerChipBarHTML();
+      html += `</div>`;
+
+      html += section("PS5 parts", consolePartsBySub("PS5"), null, "ps5");
+      html += section("PS4 parts", consolePartsBySub("PS4"), null, "ps4");
+      html += section("Xbox parts", consolePartsBySub("XBOX"), null, "xbox");
+      html += section("Game Boy / GBA parts", consolePartsBySub("GameBoy", "GB", "GBA"), null, "gameboy");
+      html += section(
+        "Switch / other console parts",
+        consolePartsBySub("Switch", "Switch pro").concat(otherConsolesParts()),
+        null,
+        "switch"
+      );
+      html += section("Screens / LCD / IPS", screenParts, "Display replacements and kits.", "screens");
+      html += section(
+        "Li-ion cells (18650 / 21700)",
+        liIonCells,
+        "Cylindrical cells for packs, power banks and repairs.",
+        "liion"
+      );
+      html += section(
+        "Stations for board work",
+        heavyStations,
+        "Prefer higher power and C245 / C470 when possible.",
+        "soldering"
+      );
+      html += section("Hot air", hotairs, "Use the power filter when Hot air is selected.", "hotair");
+      html += section("Tips (C245 + C470)", tipsByCompat("C245", "C470"), null, "tips");
+      html += section("Handles (C245 / C470)", handlesByCompat("C245", "C470", "T245", "T470"), null, "handles");
+      html += section("Flux", bySub("flux"), null, "consumables");
+      html += section("Solder", bySub("solder"), null, "consumables");
+      html += section("Wick", bySub("wick"), null, "consumables");
+      setTimeout(() => {
+        updateCategoryChipAvailability();
+        updateSecondaryFilterBars();
+      }, 0);
+      break;
+    }
+
+    case "show_consumables_all": {
+      html += alwaysRecommendExtras();
+      break;
+    }
+
+    // --- STATIONS (legacy paths kept if reached somehow) ---
     case "rec_station_gen": {
       const tips = ["C245", "T12"];
       html += section(
@@ -1519,6 +2447,7 @@ function showResults(key) {
   </div>`;
 
   res.innerHTML = html;
+  scrollToFilters();
 }
 
 function restart() {
@@ -1529,6 +2458,7 @@ function restart() {
   document.getElementById("results").innerHTML = "";
   showMain();
   renderQuestion("start");
+  window.scrollTo(0, 0);
 }
 
 // ========== ABOUT / CONTACT ==========
