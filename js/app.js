@@ -672,7 +672,19 @@ function getProductThumb(p) {
 
 /** Return list of tip system codes for a product (e.g. ["C245","C210"]) */
 function getCompatibleTipsList(p) {
+  const isJoystickTip =
+    p.sub_category === "tips" && (p.model || "").toLowerCase() === "joystick";
   const code = String(p.compatibility || "").trim();
+
+  // Joystick-shaped tips: SPECIAL + real iron tip system (1.1→C245, 1.2→T12, 1.3→900M)
+  if (isJoystickTip) {
+    const systems = [];
+    if (code && COMPAT[code] && COMPAT[code].length) {
+      COMPAT[code].forEach(t => systems.push(String(t).toUpperCase()));
+    }
+    return ["SPECIAL", ...systems];
+  }
+
   if (!code) return [];
   if (/joystick|hdmi|modding/i.test(code)) return [];
   const mapped = COMPAT[code];
@@ -684,15 +696,22 @@ function getCompatibleTipsList(p) {
   return [];
 }
 
+/** All special joystick tips (PS5/PS4/Xbox/Switch Pro shapes) */
+function allJoystickTips() {
+  return filterProducts(p =>
+    p.sub_category === "tips" && (p.model || "").toLowerCase() === "joystick"
+  );
+}
+
 let activeTipFilter = null;
 
-/** Build a tip-system chip bar HTML (All + each code). showFor = comma list of group ids that reveal this bar. */
+/** Build a tip-system chip bar HTML (All + each code + Special). showFor = groups that reveal this bar. */
 function tipChipBarHTML(tipCodes, showFor) {
   const standard = ["C245", "C210", "C115", "T12", "C470", "900M"];
   const codes = [...new Set([
     ...standard,
     ...(tipCodes || []).map(t => String(t).toUpperCase()).filter(Boolean)
-  ])];
+  ])].filter(t => t !== "SPECIAL");
   const order = ["C245", "C210", "C115", "T12", "C470", "900M"];
   codes.sort((a, b) => {
     const ia = order.indexOf(a);
@@ -706,8 +725,11 @@ function tipChipBarHTML(tipCodes, showFor) {
   codes.forEach(t => {
     chips += `<button type="button" class="tip-chip${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')">${t}</button>`;
   });
-  const show = showFor || "station,portable,soldering,tips";
-  return `<div class="tip-chip-bar" id="tip-chip-bar" data-show-for="${show}" style="display:none">
+  // Special = joystick-shaped tips (compatible with C245 / T12 / 900M depending on product)
+  const specialActive = activeTipFilter === "SPECIAL";
+  chips += `<button type="button" class="tip-chip tip-chip-special${specialActive ? " tip-active" : ""}" data-tip="SPECIAL" onclick="filterByTip('SPECIAL')" title="Joystick-shaped tips for controller repair (compatible with C245 / T12 / 900M irons)">Special (Joystick)</button>`;
+  const show = showFor || "station,portable,soldering,tips,handles,iron,all";
+  return `<div class="tip-chip-bar" id="tip-chip-bar" data-show-for="${show}" style="display:flex">
     <span class="tip-chip-label">Filter by tip system:</span>
     <div class="tip-chip-row">${chips}</div>
   </div>`;
@@ -722,14 +744,44 @@ function collectTipCodes(items) {
   return [...set];
 }
 
+/** Special (Joystick) tip filter allowed only for:
+ *  - Use-cases: All / General / Consoles
+ *  - Parts console chips: All / PS5 / PS4 / Xbox (not Game Boy, Switch, screens, etc.)
+ */
+function isSpecialJoystickAllowed() {
+  const uc = activeUseCase || "all";
+  const ucOk = uc === "all" || uc === "general" || uc === "consoles";
+  if (!ucOk) return false;
+
+  const group = (activeResultGroup || "all").toLowerCase();
+  const sub = (activeResultSubgroup || "all").toLowerCase();
+
+  // Parts hub: consoles subgroup must be all / ps5 / ps4 / xbox
+  if (group === "consoles") {
+    return sub === "all" || sub === "ps5" || sub === "ps4" || sub === "xbox";
+  }
+
+  // Console-repair style category chips (ps5, ps4, xbox, gameboy, switch, …)
+  const partsConsoleGroups = ["ps5", "ps4", "xbox", "gameboy", "switch", "screens", "liion"];
+  if (partsConsoleGroups.includes(group)) {
+    return group === "ps5" || group === "ps4" || group === "xbox";
+  }
+
+  // All / tips / soldering / tools categories → allowed
+  return true;
+}
+
 function filterByTip(tip) {
   tip = String(tip || "").toUpperCase();
   if (NO_TIP_USE_CASES.includes(activeUseCase)) {
     return;
   }
+  if (tip === "SPECIAL" && !isSpecialJoystickAllowed()) {
+    return;
+  }
   // Greyed (incompatible for use-case) tips are not selectable
   const allowedTips = (USE_CASE_TIPS[activeUseCase] || []).map(t => String(t).toUpperCase());
-  if (allowedTips.length && tip && !allowedTips.includes(tip)) {
+  if (allowedTips.length && tip && tip !== "SPECIAL" && !allowedTips.includes(tip)) {
     return;
   }
   // Toggle off if same tip clicked again
@@ -739,13 +791,37 @@ function filterByTip(tip) {
   }
   activeTipFilter = tip;
 
-  // Only filter tip-related product cards; leave flux/solder/etc alone
+  // Special: stay on current console chip (PS5/PS4/Xbox) if that group has joystick tips.
+  // Only jump to Tips when the current view has no SPECIAL cards at all.
+  if (tip === "SPECIAL") {
+    const group = (activeResultGroup || "all").toLowerCase();
+    const specialInCurrentView = [...document.querySelectorAll(".product-card[data-tips]")].some(card => {
+      const section = card.closest(".result-group");
+      if (!section) return false;
+      const g = (section.getAttribute("data-group") || "").toLowerCase();
+      if (group !== "all" && g !== group) return false;
+      return (card.getAttribute("data-tips") || "").toUpperCase().split(",").map(t => t.trim()).includes("SPECIAL");
+    });
+    if (!specialInCurrentView && group !== "all" && group !== "tips") {
+      // Fallback: show Tips category (all joystick tips)
+      if (document.querySelector('.result-group[data-group="tips"]')) {
+        activeResultGroup = "tips";
+        document.querySelectorAll(".cat-chip[data-group]").forEach(btn => {
+          btn.classList.toggle("cat-active", (btn.getAttribute("data-group") || "") === "tips");
+        });
+        if (typeof applyGroupVisibility === "function") applyGroupVisibility();
+      }
+    }
+  }
+
+  // Strict filter: only matching products stay listed (no greyed leftovers in the scroll)
   document.querySelectorAll(".product-card").forEach(card => {
     const raw = card.getAttribute("data-tips");
     if (raw === null) {
-      // no tip data at all — keep visible (consumables, etc.)
-      card.classList.remove("tip-dimmed", "tip-match");
-      card.style.display = "";
+      // No tip data: hide when any tip filter is active so the list is only filtered items
+      card.classList.add("tip-dimmed");
+      card.classList.remove("tip-match");
+      card.style.display = "none";
       return;
     }
     const tips = raw
@@ -757,7 +833,6 @@ function filterByTip(tip) {
       card.classList.add("tip-match");
       card.style.display = "";
     } else {
-      // Hide incompatible irons/stations (do not leave greyed cards in the middle)
       card.classList.add("tip-dimmed");
       card.classList.remove("tip-match");
       card.style.display = "none";
@@ -766,16 +841,17 @@ function filterByTip(tip) {
 
   // Highlight active tip buttons (card tags + chip bar)
   document.querySelectorAll(".tag.tips[data-tip]").forEach(btn => {
-    btn.classList.toggle("tip-active", btn.getAttribute("data-tip") === tip);
+    btn.classList.toggle("tip-active", (btn.getAttribute("data-tip") || "").toUpperCase() === tip);
   });
   document.querySelectorAll(".tip-chip[data-tip]").forEach(btn => {
-    const bt = btn.getAttribute("data-tip") || "";
+    const bt = (btn.getAttribute("data-tip") || "").toUpperCase();
     btn.classList.toggle("tip-active", bt === tip);
   });
 
   updateTipFilterBar();
   reorderProductCards();
   updateSectionCounts();
+  // Keep filters in view — do not jump scroll on tip filter
 }
 
 function clearTipFilter() {
@@ -791,25 +867,33 @@ function clearTipFilter() {
     const bt = btn.getAttribute("data-tip") || "";
     btn.classList.toggle("tip-active", bt === "");
   });
+  // Restore section visibility according to category chips
+  if (typeof applyGroupVisibility === "function") applyGroupVisibility();
   updateTipFilterBar();
   reorderProductCards();
   updateSectionCounts();
 }
 
-/** Update section titles like "Soldering stations (19)" to reflect visible cards */
+/** Update section titles and hide empty sections while a tip filter is active */
 function updateSectionCounts() {
   document.querySelectorAll(".result-group").forEach(section => {
-    if (section.style.display === "none") return;
     const title = section.querySelector(".section-title, h2, h3");
-    if (!title) return;
     const grid = section.querySelector(".product-grid");
     if (!grid) return;
     const visible = [...grid.querySelectorAll(".product-card")].filter(
       c => c.style.display !== "none" && !c.classList.contains("tip-dimmed")
     ).length;
-    const base = (title.getAttribute("data-base-title") || title.textContent || "").replace(/\s*\(\d+\)\s*$/, "").trim();
-    title.setAttribute("data-base-title", base);
-    title.textContent = visible ? `${base} (${visible})` : base;
+    if (title) {
+      const base = (title.getAttribute("data-base-title") || title.textContent || "").replace(/\s*\(\d+\)\s*$/, "").trim();
+      title.setAttribute("data-base-title", base);
+      title.textContent = visible ? `${base} (${visible})` : base;
+    }
+    // While tip-filtering: hide sections with nothing matching so scroll only shows filtered items
+    if (activeTipFilter) {
+      section.style.display = visible > 0 ? "" : "none";
+    } else if (section.dataset.groupHidden !== "1") {
+      // leave category visibility to applyGroupVisibility (do not force show here)
+    }
   });
 }
 
@@ -824,8 +908,12 @@ function updateTipFilterBar() {
     bar.id = "tip-filter-bar";
     bar.className = "tip-filter-bar";
     const results = document.getElementById("results");
+    const sticky = document.getElementById("filter-sticky");
     const chipBar = document.getElementById("tip-chip-bar");
-    if (chipBar && chipBar.nextSibling) {
+    // Prefer under sticky filters so it stays near the top without scroll jump
+    if (sticky && sticky.parentNode) {
+      sticky.parentNode.insertBefore(bar, sticky.nextSibling);
+    } else if (chipBar && chipBar.nextSibling) {
       results.insertBefore(bar, chipBar.nextSibling);
     } else if (results && results.firstChild) {
       results.insertBefore(bar, results.firstChild);
@@ -833,8 +921,11 @@ function updateTipFilterBar() {
       results.appendChild(bar);
     }
   }
+  const label = activeTipFilter === "SPECIAL"
+    ? "Special (Joystick tips — C245 / T12 / 900M compatible)"
+    : activeTipFilter;
   bar.innerHTML = `
-    <span>Showing products compatible with <strong>${activeTipFilter}</strong></span>
+    <span>Showing only <strong>${label}</strong></span>
     <button type="button" class="btn btn-secondary btn-sm" onclick="clearTipFilter()">Clear filter</button>
   `;
 }
@@ -846,8 +937,9 @@ function productCard(p) {
   if (p.power) tags.push(`<span class="tag power">${p.power}</span>`);
   if (p.price) tags.push(`<span class="tag price">${p.price}</span>`);
   tipList.forEach(t => {
+    const label = t === "SPECIAL" ? "Joystick" : t;
     tags.push(
-      `<button type="button" class="tag tips${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')" title="Filter by ${t}">${t}</button>`
+      `<button type="button" class="tag tips${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')" title="Filter by ${label}">${label}</button>`
     );
   });
   const meta = tags.length
@@ -1062,6 +1154,15 @@ function updateTipChipAvailability() {
 
     if (!tip) {
       btn.classList.remove("cat-disabled");
+      return;
+    }
+
+    // Special (Joystick): All/General/Consoles use-case + PS4/PS5/Xbox/All in parts
+    if (tip === "SPECIAL") {
+      const specialOk = isSpecialJoystickAllowed();
+      btn.classList.toggle("cat-disabled", !specialOk);
+      btn.disabled = !specialOk;
+      if (!specialOk && activeTipFilter === "SPECIAL") clearTipFilter();
       return;
     }
 
@@ -1493,6 +1594,12 @@ function showResults(key) {
         "station"
       );
       html += section("Tips (all systems)", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"), null, "tips");
+      html += section(
+        "Joystick tips (Special)",
+        allJoystickTips(),
+        "Compatible with C245 / T12 / 900M depending on the tip. Use filter → Special, or C245 / T12 / 900M.",
+        "tips"
+      );
       html += section("Handles", bySub("handles"), null, "handles");
       html += alwaysRecommendExtras();
       break;
@@ -1506,7 +1613,13 @@ function showResults(key) {
         portables,
         "Filter by tip system using the chips above."
       );
-      html += section("Matching Tips", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"));
+      html += section("Matching Tips", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"), null, "tips");
+      html += section(
+        "Joystick tips (Special)",
+        allJoystickTips(),
+        "Compatible with C245 / T12 / 900M. Filter → Special or by tip system.",
+        "tips"
+      );
       html += alwaysRecommendExtras();
       break;
     }
@@ -1573,6 +1686,12 @@ function showResults(key) {
       html += section("Battery testers", bySubAny("battery_tester"), null, "measure", "battery_tester");
       html += section("Power supplies", bySubAny("psu"), null, "psu");
       html += section("Tips to go with it", tipsByCompat("C245", "T12", "900M").slice(0, 10), null, "tips");
+      html += section(
+        "Joystick tips (Special)",
+        allJoystickTips(),
+        "Compatible with C245 / T12 / 900M irons. Use tip filter → Special or by system.",
+        "tips"
+      );
       html += section("Handles", handlesByCompat("C245", "T12", "C210"), "Filter by tip system when Handles is selected.", "handles");
       html += section("Flux", bySub("flux"), null, "consumables", "flux");
       html += section("Solder", bySub("solder"), null, "consumables", "solder");
@@ -1642,6 +1761,12 @@ function showResults(key) {
       html += section("Battery testers", bySubAny("battery_tester"), null, "measure", "battery_tester");
       html += section("Power supplies", bySubAny("psu"), "Voltage & current filters when PSU is selected.", "psu");
       html += section("Tips", bySub("tips").filter(p => (p.model || "").toLowerCase() !== "joystick"), null, "tips");
+      html += section(
+        "Joystick tips (Special)",
+        allJoystickTips(),
+        "Shaped tips for PS5 / PS4 / Xbox / Switch Pro. Each tip is also compatible with a tip system (C245 / T12 / 900M) — filter by Special or by that system.",
+        "tips"
+      );
       html += section("Handles", handles, "Tip system filter when Handles is selected.", "handles");
       html += section("Flux", bySub("flux"), null, "consumables", "flux");
       html += section("Solder", bySub("solder"), null, "consumables", "solder");
@@ -1752,18 +1877,47 @@ function showResults(key) {
         { id: "handles", label: "Handles" },
         { id: "consumables", label: "Flux / Solder / Wick" }
       ]);
-      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245", "C470"], "soldering,handles,tips");
+      // Tip bar must stay active on PS5/PS4/Xbox chips (not only soldering/tips)
+      html += tipChipBarHTML(
+        tipCodes.length ? tipCodes : ["C245", "T12", "900M", "C470"],
+        "all,ps5,ps4,xbox,soldering,handles,tips"
+      );
       html += powerChipBarHTML();
       html += `</div>`;
 
+      // Joystick tips use the SAME data-group as the console so they stay visible when filtering PS5/PS4/Xbox
       html += section("PS5 parts", consolePartsBySub("PS5"), null, "ps5");
+      html += section(
+        "PS5 Joystick tips (Special)",
+        joystickTips("PS5"),
+        "Shaped tips for PS5 sticks. Compatible with C245 / T12 / 900M. Use filter → Special.",
+        "ps5"
+      );
       html += section("PS4 parts", consolePartsBySub("PS4"), null, "ps4");
+      html += section(
+        "PS4 Joystick tips (Special)",
+        joystickTips("PS4"),
+        "Shaped tips for PS4 sticks. Compatible with C245 / T12 / 900M. Use filter → Special.",
+        "ps4"
+      );
       html += section("Xbox parts", consolePartsBySub("XBOX"), null, "xbox");
+      html += section(
+        "Xbox Joystick tips (Special)",
+        joystickTips("XBOX"),
+        "Shaped tips for Xbox sticks. Compatible with C245 / T12 / 900M. Use filter → Special.",
+        "xbox"
+      );
       html += section("Game Boy / GBA parts", consolePartsBySub("GameBoy", "GB", "GBA"), null, "gameboy");
       html += section(
         "Switch / other console parts",
         consolePartsBySub("Switch", "Switch pro").concat(otherConsolesParts()),
         null,
+        "switch"
+      );
+      html += section(
+        "Switch Pro Joystick tips (Special)",
+        joystickTips("Switch"),
+        "Shaped tips for Switch Pro sticks.",
         "switch"
       );
       html += section("Screens / LCD / IPS", screenParts, "Display replacements and kits.", "screens");
@@ -1781,6 +1935,12 @@ function showResults(key) {
       );
       html += section("Hot air", hotairs, "Use the power filter when Hot air is selected.", "hotair");
       html += section("Tips (C245 + C470)", tipsByCompat("C245", "C470"), null, "tips");
+      html += section(
+        "All Joystick tips (Special)",
+        allJoystickTips(),
+        "All console shaped tips. Prefer PS5 / PS4 / Xbox chips for console-specific lists.",
+        "tips"
+      );
       html += section("Handles (C245 / C470)", handlesByCompat("C245", "C470", "T245", "T470"), null, "handles");
       html += section("Flux", bySub("flux"), null, "consumables");
       html += section("Solder", bySub("solder"), null, "consumables");
@@ -1788,6 +1948,7 @@ function showResults(key) {
       setTimeout(() => {
         updateCategoryChipAvailability();
         updateSecondaryFilterBars();
+        updateTipChipAvailability();
       }, 0);
       break;
     }
@@ -2409,29 +2570,77 @@ function showResults(key) {
       }));
       break;
 
-    // --- SIMPLE CONSOLE PAGES (all parts for that console) ---
-    case "show_console_ps5":
-      html += section("PS5 parts", consolePartsBySub("PS5"));
-      html += solderingForRepair();
+    // --- SIMPLE CONSOLE PAGES (all parts + joystick tips for PS5/PS4/Xbox) ---
+    case "show_console_ps5": {
+      const tipCodes = collectTipCodes(stationsCompatibleWith(["C245", "T12"]).concat(bySub("iron")));
+      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245", "T12", "900M"], "tips,soldering,all");
+      html += section("PS5 parts", consolePartsBySub("PS5"), null, "ps5");
+      html += section(
+        "PS5 Joystick tips (Special)",
+        joystickTips("PS5"),
+        "Shaped tips for PS5 stick repair. Compatible with C245 / T12 / 900M — filter → Special or by tip system.",
+        "tips"
+      );
+      html += solderingForJoystick();
       html += alwaysRecommendExtras();
+      setTimeout(() => {
+        activeResultGroup = "all";
+        updateSecondaryFilterBars();
+        updateTipChipAvailability();
+      }, 0);
       break;
-    case "show_console_ps4":
-      html += section("PS4 parts", consolePartsBySub("PS4"));
-      html += solderingForRepair();
+    }
+    case "show_console_ps4": {
+      const tipCodes = collectTipCodes(stationsCompatibleWith(["C245", "T12"]).concat(bySub("iron")));
+      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245", "T12", "900M"], "tips,soldering,all");
+      html += section("PS4 parts", consolePartsBySub("PS4"), null, "ps4");
+      html += section(
+        "PS4 Joystick tips (Special)",
+        joystickTips("PS4"),
+        "Shaped tips for PS4 stick repair. Compatible with C245 / T12 / 900M — filter → Special or by tip system.",
+        "tips"
+      );
+      html += solderingForJoystick();
       html += alwaysRecommendExtras();
+      setTimeout(() => {
+        activeResultGroup = "all";
+        updateSecondaryFilterBars();
+        updateTipChipAvailability();
+      }, 0);
       break;
-    case "show_console_xbox":
-      html += section("Xbox parts", consolePartsBySub("XBOX"));
-      html += solderingForRepair();
+    }
+    case "show_console_xbox": {
+      const tipCodes = collectTipCodes(stationsCompatibleWith(["C245", "T12"]).concat(bySub("iron")));
+      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245", "T12", "900M"], "tips,soldering,all");
+      html += section("Xbox parts", consolePartsBySub("XBOX"), null, "xbox");
+      html += section(
+        "Xbox Joystick tips (Special)",
+        joystickTips("XBOX"),
+        "Shaped tips for Xbox stick repair. Compatible with C245 / T12 / 900M — filter → Special or by tip system.",
+        "tips"
+      );
+      html += solderingForJoystick();
       html += alwaysRecommendExtras();
+      setTimeout(() => {
+        activeResultGroup = "all";
+        updateSecondaryFilterBars();
+        updateTipChipAvailability();
+      }, 0);
       break;
+    }
     case "show_console_gameboy":
-      html += section("Game Boy / GBA parts", consolePartsBySub("GameBoy", "GB", "GBA"));
+      html += section("Game Boy / GBA parts", consolePartsBySub("GameBoy", "GB", "GBA"), null, "gameboy");
       html += solderingForRepair();
       html += alwaysRecommendExtras();
       break;
     case "show_console_other":
-      html += section("Other consoles (PSP, NES, etc.)", otherConsolesParts());
+      html += section("Other consoles (PSP, NES, 3DS, etc.)", otherConsolesParts());
+      html += section(
+        "Switch Pro Joystick tips (Special)",
+        joystickTips("Switch"),
+        "Joystick-shaped tips for Switch Pro modules.",
+        "tips"
+      );
       html += solderingForRepair();
       html += alwaysRecommendExtras();
       break;
