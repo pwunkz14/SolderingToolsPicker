@@ -7,7 +7,8 @@
 
 let PRODUCTS = [];
 let COMPAT = {};
-let CONFIG = { formAccessKey: "", siteName: "Soldering Tools Recommender" };
+let MENUS = { tip_compat: [], sub_categories: [], main_menus: [] };
+let CONFIG = { formAccessKey: "", siteName: "Tools Database" };
 let path = [];
 let answers = {};
 
@@ -15,11 +16,172 @@ let answers = {};
 // Edit labels / next keys / tips arrays here when the flowchart changes.
 const TREE = {
   start: {
-    q: "What are you looking for?",
-    sub: "Pick a path — or use search above anytime",
+    q: "Tools Database",
+    sub: "Browse by category — like a parts picker for electronics repair tools",
+    visual: true,
     options: [
-      { label: "Tools (Soldering, Hot Air, Flux...)", next: "show_tools_hub", key: "main", val: "tools" },
-      { label: "Repairs / Parts (PS5, PS4, Game Boy, batteries, screens…)", next: "show_console_repair", key: "main", val: "repairs" }
+      {
+        label: "Soldering Stations & Irons",
+        next: "show_soldering_db",
+        key: "cat",
+        val: "soldering",
+        image: "images/products/1.jpg",
+        desc: "Stations, portable & classic irons"
+      },
+      {
+        label: "Hot Air Stations",
+        next: "show_hotair_db",
+        key: "cat",
+        val: "hotair",
+        image: "images/products/53.png",
+        desc: "SMD / BGA rework stations"
+      },
+      {
+        label: "Tips & Handles",
+        next: "show_tips_handles_db",
+        key: "cat",
+        val: "tips_handles",
+        image: "images/products/30.jpg",
+        desc: "C245, C210, T12, 900M & more"
+      },
+      {
+        label: "Measurement Tools",
+        next: "show_measure_db",
+        key: "cat",
+        val: "measure",
+        image: "images/products/164.png",
+        desc: "Multimeters, scopes, LCR, milliohm"
+      },
+      {
+        label: "Power Supplies",
+        next: "show_psu_db",
+        key: "cat",
+        val: "psu",
+        image: "images/products/188.jpg",
+        desc: "Bench lab power supplies"
+      },
+      {
+        label: "Consumables",
+        next: "show_consumables_db",
+        key: "cat",
+        val: "consumables",
+        image: "images/products/119.jpg",
+        desc: "Flux, solder wire, wick, pumps"
+      },
+      {
+        label: "Spot Welders",
+        next: "show_spotwelder_db",
+        key: "cat",
+        val: "spotwelder",
+        image: "images/products/181.jpg",
+        desc: "Machines & nickel strips"
+      },
+      {
+        label: "Repairs & Parts",
+        next: "show_console_repair",
+        key: "cat",
+        val: "repairs",
+        image: "images/products/18.jpg",
+        desc: "PS5, PS4, Game Boy, batteries, screens"
+      },
+      {
+        label: "Practice Boards",
+        next: "show_practice_db",
+        key: "cat",
+        val: "practice",
+        image: "images/products/243.jpg",
+        desc: "Training PCBs for soldering practice"
+      },
+      {
+        label: "All Tools",
+        next: "show_tools_hub",
+        key: "cat",
+        val: "all",
+        image: null,
+        desc: "Full catalog · every filter",
+        icon: "🗄️"
+      }
+    ]
+  },
+  // Kept for compatibility if anything still links here
+  tools_visual: {
+    q: "Tools Database",
+    sub: "Browse by category",
+    visual: true,
+    options: [
+      {
+        label: "Soldering Stations & Irons",
+        next: "show_soldering_db",
+        key: "tool",
+        val: "soldering",
+        image: "images/products/1.jpg",
+        desc: "Stations, portable & classic irons"
+      },
+      {
+        label: "Hot Air Stations",
+        next: "show_hotair_db",
+        key: "tool",
+        val: "hotair",
+        image: "images/products/53.png",
+        desc: "SMD / BGA rework stations"
+      },
+      {
+        label: "Tips & Handles",
+        next: "show_tips_handles_db",
+        key: "tool",
+        val: "tips_handles",
+        image: "images/products/30.jpg",
+        desc: "C245, C210, T12, 900M & more"
+      },
+      {
+        label: "Measurement Tools",
+        next: "show_measure_db",
+        key: "tool",
+        val: "measure",
+        image: "images/products/164.png",
+        desc: "Multimeters, scopes, LCR, milliohm"
+      },
+      {
+        label: "Power Supplies",
+        next: "show_psu_db",
+        key: "tool",
+        val: "psu",
+        image: "images/products/188.jpg",
+        desc: "Bench lab power supplies"
+      },
+      {
+        label: "Consumables",
+        next: "show_consumables_db",
+        key: "tool",
+        val: "consumables",
+        image: "images/products/119.jpg",
+        desc: "Flux, solder wire, wick, pumps"
+      },
+      {
+        label: "Spot Welders",
+        next: "show_spotwelder_db",
+        key: "tool",
+        val: "spotwelder",
+        image: "images/products/181.jpg",
+        desc: "Machines & nickel strips"
+      },
+      {
+        label: "Practice Boards",
+        next: "show_practice_db",
+        key: "tool",
+        val: "practice",
+        image: "images/products/243.jpg",
+        desc: "Training PCBs for soldering practice"
+      },
+      {
+        label: "All Tools",
+        next: "show_tools_hub",
+        key: "tool",
+        val: "all",
+        image: null,
+        desc: "Full catalog · every filter",
+        icon: "🗄️"
+      }
     ]
   },
   tools_type: {
@@ -202,6 +364,189 @@ const TREE = {
   }
 };
 
+
+// ========== DEEP LINKS (shareable category URLs) ==========
+// Examples: index.html#hotair  |  #practice  |  #psu  |  #tips  |  #repairs
+
+function shareCategoryBarHTML(resultKey) {
+  const h = RESULT_TO_HASH[resultKey];
+  if (!h) return "";
+  return `<div class="share-bar">
+    <span class="share-label">Share this category:</span>
+    <code class="share-url">#${h}</code>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="copyCategoryLink('${h}')">Copy link</button>
+  </div>`;
+}
+
+function copyCategoryLink(hashKey) {
+  const url = location.origin + location.pathname + location.search + "#" + hashKey;
+  const done = () => {
+    const btn = document.querySelector(".share-bar .btn");
+    if (btn) {
+      const prev = btn.textContent;
+      btn.textContent = "Copied!";
+      setTimeout(() => { btn.textContent = prev; }, 1500);
+    }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(done).catch(() => prompt("Copy this link:", url));
+  } else {
+    prompt("Copy this link:", url);
+  }
+}
+
+const CATEGORY_ROUTES = {
+  soldering: "show_soldering_db",
+  station: "show_soldering_db",
+  stations: "show_soldering_db",
+  iron: "show_soldering_db",
+  irons: "show_soldering_db",
+  hotair: "show_hotair_db",
+  "hot-air": "show_hotair_db",
+  tips: "show_tips_handles_db",
+  handles: "show_tips_handles_db",
+  "tips-handles": "show_tips_handles_db",
+  measure: "show_measure_db",
+  measurement: "show_measure_db",
+  multimeter: "show_measure_db",
+  psu: "show_psu_db",
+  power: "show_psu_db",
+  "power-supplies": "show_psu_db",
+  consumables: "show_consumables_db",
+  flux: "show_consumables_db",
+  solder: "show_consumables_db",
+  spotwelder: "show_spotwelder_db",
+  "spot-welder": "show_spotwelder_db",
+  practice: "show_practice_db",
+  "practice-boards": "show_practice_db",
+  "practice-kits": "show_practice_db",
+  repairs: "show_console_repair",
+  parts: "show_console_repair",
+  all: "show_tools_hub",
+  tools: "show_tools_hub",
+  database: "show_tools_hub"
+};
+
+const RESULT_TO_HASH = {
+  show_soldering_db: "soldering",
+  show_hotair_db: "hotair",
+  show_tips_handles_db: "tips",
+  show_measure_db: "measure",
+  show_psu_db: "psu",
+  show_consumables_db: "consumables",
+  show_spotwelder_db: "spotwelder",
+  show_practice_db: "practice",
+  show_console_repair: "repairs",
+  show_tools_hub: "all"
+};
+
+function getRouteFromHash() {
+  const raw = (location.hash || "").replace(/^#/, "").trim().toLowerCase();
+  if (!raw) return null;
+  // support #hotair and #/hotair and #category=hotair
+  const key = raw.replace(/^\//, "").split(/[/?&]/)[0].replace(/^category=/, "");
+  return CATEGORY_ROUTES[key] || null;
+}
+
+let _skipHistory = false;
+
+function setCategoryHash(resultKey, mode) {
+  // mode: "push" | "replace" | "none"
+  if (mode === "none" || _skipHistory) return;
+  const h = RESULT_TO_HASH[resultKey];
+  const next = h ? "#" + h : (location.pathname + location.search);
+  const state = { view: resultKey || "home" };
+  if (!h) {
+    if (mode === "replace") history.replaceState(state, "", location.pathname + location.search);
+    else if (location.hash) history.pushState(state, "", location.pathname + location.search);
+    return;
+  }
+  if (location.hash === next && history.state && history.state.view === resultKey) return;
+  if (mode === "replace") history.replaceState(state, "", next);
+  else history.pushState(state, "", next);
+}
+
+function clearCategoryHash() {
+  if (location.hash) {
+    history.pushState({ view: "home" }, "", location.pathname + location.search);
+  } else {
+    history.replaceState({ view: "home" }, "", location.pathname + location.search);
+  }
+}
+
+function openRouteFromHash() {
+  const key = getRouteFromHash();
+  if (!key) return false;
+  path = [{ node: "start", label: RESULT_TO_HASH[key] ? key.replace(/^show_/, "") : "category" }];
+  answers = { cat: key };
+  _skipHistory = true;
+  try { showResults(key); } finally { _skipHistory = false; }
+  return true;
+}
+
+function goHomeView(fromPopstate) {
+  path = [];
+  answers = {};
+  activeTipFilter = null;
+  const res = document.getElementById("results");
+  if (res) {
+    res.classList.remove("active");
+    res.innerHTML = "";
+  }
+  showMain();
+  renderQuestion("start");
+  if (!fromPopstate && location.hash) {
+    history.pushState({ view: "home" }, "", location.pathname + location.search);
+  } else if (!fromPopstate) {
+    history.replaceState({ view: "home" }, "", location.pathname + location.search);
+  }
+  window.scrollTo(0, 0);
+}
+
+
+/** Build home visual menu + routes from data/menus.json */
+function applyMenusToTree() {
+  const list = (MENUS.main_menus || []).filter(m => m && m.enabled !== false);
+  if (!list.length) return;
+
+  const options = list.map(m => {
+    const special = m.special || "";
+    let next = "show_menu_" + m.id;
+    if (special === "repairs") next = "show_console_repair";
+    if (special === "all_tools") next = "show_tools_hub";
+    // keep legacy dedicated routes when id matches known ones
+    const legacy = {
+      soldering: "show_soldering_db",
+      hotair: "show_hotair_db",
+      tips_handles: "show_tips_handles_db",
+      measure: "show_measure_db",
+      psu: "show_psu_db",
+      consumables: "show_consumables_db",
+      spotwelder: "show_spotwelder_db",
+      practice: "show_practice_db"
+    };
+    if (legacy[m.id]) next = legacy[m.id];
+    CATEGORY_ROUTES[m.id] = next;
+    RESULT_TO_HASH[next] = m.id;
+    return {
+      label: m.label || m.id,
+      next,
+      key: "cat",
+      val: m.id,
+      image: m.image || null,
+      icon: m.icon || "📂",
+      desc: m.desc || "",
+      menuId: m.id,
+      menuSubs: m.subs || []
+    };
+  });
+
+  if (TREE.start) {
+    TREE.start.visual = true;
+    TREE.start.options = options;
+  }
+}
+
 // ========== LOAD DATA ==========
 // products.json  = stable catalog (brand, model, power, ESD…)
 // links.json     = links + images (update often — affiliate links expire)
@@ -211,11 +556,12 @@ async function loadData() {
   area.innerHTML = `<div class="loading">Loading product database…</div>`;
 
   try {
-    const [prodRes, compatRes, linksRes, configRes] = await Promise.all([
+    const [prodRes, compatRes, linksRes, configRes, menusRes] = await Promise.all([
       fetch("data/products.json"),
       fetch("data/compatibility.json"),
       fetch("data/links.json"),
-      fetch("data/config.json")
+      fetch("data/config.json"),
+      fetch("data/menus.json")
     ]);
     if (!prodRes.ok) throw new Error("Failed to load products.json");
     if (!compatRes.ok) throw new Error("Failed to load compatibility.json");
@@ -224,22 +570,31 @@ async function loadData() {
     if (configRes.ok) {
       CONFIG = { ...CONFIG, ...(await configRes.json()) };
     }
+    if (menusRes.ok) {
+      try { MENUS = { tip_compat: [], sub_categories: [], main_menus: [], ...(await menusRes.json()) }; } catch (e) {}
+    }
 
     const products = await prodRes.json();
     COMPAT = await compatRes.json();
     const links = await linksRes.json();
 
-    // Merge link + image from links.json into each product
+    // Merge link + image + banggood from links.json into each product
     PRODUCTS = products.map(p => {
       const extra = links[String(p.id)] || {};
       return {
         ...p,
         link: extra.link || "",
+        banggood: extra.banggood || "",
         image: extra.image || ""
       };
     });
 
-    renderQuestion("start");
+    applyMenusToTree();
+
+    // Shareable category links: #hotair #practice #psu etc.
+    if (!openRouteFromHash()) {
+      renderQuestion("start");
+    }
   } catch (err) {
     area.innerHTML = `<div class="error-box">
       <strong>Could not load data files.</strong><br>
@@ -508,28 +863,55 @@ function renderQuestion(nodeKey) {
   results.classList.remove("active");
   area.style.display = "block";
 
-  let html = `<div class="card">
-    <div class="question-title">${node.q}</div>
-    <div class="question-sub">${node.sub || ""}</div>
-    <div class="options">`;
+  let html = "";
 
-  node.options.forEach((opt, i) => {
-    html += `<button class="option-btn" onclick="choose('${nodeKey}', ${i})">
-      <span class="num">${i + 1}</span>
-      <span>${opt.label}</span>
-    </button>`;
-  });
-
-  html += `</div>
-    <div class="nav-buttons">
-      ${path.length > 0 ? '<button class="btn btn-secondary" onclick="goBack()">← Back</button>' : ""}
-    </div>
-  </div>`;
+  if (node.visual) {
+    // Big-picture category menu
+    html += `<div class="card visual-menu-card">
+      <div class="question-title">${node.q}</div>
+      <div class="question-sub">${node.sub || ""}</div>
+      <div class="category-grid">`;
+    node.options.forEach((opt, i) => {
+      const imgBlock = opt.image
+        ? `<div class="cat-img-wrap"><img src="${opt.image}" alt="${opt.label}" class="cat-img" loading="lazy" onerror="this.parentElement.classList.add('no-img')"></div>`
+        : `<div class="cat-img-wrap cat-icon-only"><span class="cat-big-icon">${opt.icon || "📂"}</span></div>`;
+      html += `<button type="button" class="category-card" onclick="choose('${nodeKey}', ${i})">
+        ${imgBlock}
+        <div class="cat-body">
+          <div class="cat-label">${opt.label}</div>
+          ${opt.desc ? `<div class="cat-desc">${opt.desc}</div>` : ""}
+        </div>
+      </button>`;
+    });
+    html += `</div>
+      <div class="nav-buttons">
+        ${path.length > 0 ? '<button class="btn btn-secondary" onclick="goBack()">← Back</button>' : ""}
+      </div>
+    </div>`;
+  } else {
+    html += `<div class="card">
+      <div class="question-title">${node.q}</div>
+      <div class="question-sub">${node.sub || ""}</div>
+      <div class="options">`;
+    node.options.forEach((opt, i) => {
+      html += `<button class="option-btn" onclick="choose('${nodeKey}', ${i})">
+        <span class="num">${i + 1}</span>
+        <span>${opt.label}</span>
+      </button>`;
+    });
+    html += `</div>
+      <div class="nav-buttons">
+        ${path.length > 0 ? '<button class="btn btn-secondary" onclick="goBack()">← Back</button>' : ""}
+      </div>
+    </div>`;
+  }
 
   area.innerHTML = html;
   updateBreadcrumb();
   updateProgress();
   document.getElementById("restartBtn").classList.toggle("visible", path.length > 0);
+  // Home = visual category grid (PCPartPicker-style entry)
+  document.body.classList.toggle("home-mode", !!node.visual && path.length === 0);
 }
 
 function choose(nodeKey, idx) {
@@ -580,11 +962,7 @@ function jumpToStep(index) {
   // index -1 = home (start)
   if (index < -1) return;
   if (index === -1) {
-    path = [];
-    answers = {};
-    document.getElementById("results").classList.remove("active");
-    document.getElementById("results").innerHTML = "";
-    renderQuestion("start");
+    goHomeView(false);
     return;
   }
   if (index >= path.length) return;
@@ -814,29 +1192,29 @@ function filterByTip(tip) {
     }
   }
 
-  // Strict filter: only matching products stay listed (no greyed leftovers in the scroll)
+  // Strict filter: only matching products stay listed (works with table rows)
   document.querySelectorAll(".product-card").forEach(card => {
     const raw = card.getAttribute("data-tips");
+    const showRow = (el) => {
+      el.classList.remove("tip-dimmed");
+      el.classList.add("tip-match");
+      el.style.removeProperty("display"); // restore table-row / default
+    };
+    const hideRow = (el) => {
+      el.classList.add("tip-dimmed");
+      el.classList.remove("tip-match");
+      el.style.display = "none";
+    };
     if (raw === null) {
-      // No tip data: hide when any tip filter is active so the list is only filtered items
-      card.classList.add("tip-dimmed");
-      card.classList.remove("tip-match");
-      card.style.display = "none";
+      hideRow(card);
       return;
     }
     const tips = raw
       .split(",")
       .map(t => t.trim().toUpperCase())
       .filter(Boolean);
-    if (tips.includes(tip)) {
-      card.classList.remove("tip-dimmed");
-      card.classList.add("tip-match");
-      card.style.display = "";
-    } else {
-      card.classList.add("tip-dimmed");
-      card.classList.remove("tip-match");
-      card.style.display = "none";
-    }
+    if (tips.includes(tip)) showRow(card);
+    else hideRow(card);
   });
 
   // Highlight active tip buttons (card tags + chip bar)
@@ -857,8 +1235,8 @@ function filterByTip(tip) {
 function clearTipFilter() {
   activeTipFilter = null;
   document.querySelectorAll(".product-card").forEach(card => {
-    card.classList.remove("tip-dimmed", "tip-match");
-    card.style.display = "";
+    card.classList.remove("tip-dimmed", "tip-match", "power-dimmed", "psu-dimmed", "use-dimmed");
+    card.style.removeProperty("display");
   });
   document.querySelectorAll(".tag.tips").forEach(btn => {
     btn.classList.remove("tip-active");
@@ -878,7 +1256,7 @@ function clearTipFilter() {
 function updateSectionCounts() {
   document.querySelectorAll(".result-group").forEach(section => {
     const title = section.querySelector(".section-title, h2, h3");
-    const grid = section.querySelector(".product-grid");
+    const grid = section.querySelector(".product-list, .product-grid");
     if (!grid) return;
     const visible = [...grid.querySelectorAll(".product-card")].filter(
       c => c.style.display !== "none" && !c.classList.contains("tip-dimmed")
@@ -930,42 +1308,106 @@ function updateTipFilterBar() {
   `;
 }
 
+
+/** Floating image zoom on thumbnail hover (works above table overflow) */
+function bindImageZoom(root) {
+  const scope = root || document;
+  let tip = document.getElementById("img-zoom-tip");
+  if (!tip) {
+    tip = document.createElement("div");
+    tip.id = "img-zoom-tip";
+    tip.className = "img-zoom-tip";
+    tip.innerHTML = '<img alt="">';
+    document.body.appendChild(tip);
+  }
+  const tipImg = tip.querySelector("img");
+
+  const hide = () => {
+    tip.classList.remove("visible");
+  };
+
+  scope.querySelectorAll(".row-thumb[data-zoom-src], .row-thumb[src]").forEach(img => {
+    if (img.dataset.zoomBound === "1") return;
+    img.dataset.zoomBound = "1";
+    const src = img.getAttribute("data-zoom-src") || img.getAttribute("src");
+    if (!src) return;
+
+    img.addEventListener("mouseenter", () => {
+      tipImg.src = src;
+      tip.classList.add("visible");
+      positionZoomTip(img, tip);
+    });
+    img.addEventListener("mousemove", () => positionZoomTip(img, tip));
+    img.addEventListener("mouseleave", hide);
+  });
+}
+
+function positionZoomTip(anchor, tip) {
+  const r = anchor.getBoundingClientRect();
+  const pad = 12;
+  const tipW = tip.offsetWidth || 200;
+  const tipH = tip.offsetHeight || 200;
+  let left = r.right + pad;
+  let top = r.top + r.height / 2 - tipH / 2;
+  if (left + tipW > window.innerWidth - 8) {
+    left = r.left - tipW - pad;
+  }
+  if (left < 8) left = 8;
+  if (top < 8) top = 8;
+  if (top + tipH > window.innerHeight - 8) {
+    top = window.innerHeight - tipH - 8;
+  }
+  tip.style.left = left + "px";
+  tip.style.top = top + "px";
+}
+
 function productCard(p) {
   const name = [p.brand, p.model].filter(Boolean).join(" ");
   const tipList = getCompatibleTipsList(p);
-  const tags = [];
-  if (p.power) tags.push(`<span class="tag power">${p.power}</span>`);
-  if (p.price) tags.push(`<span class="tag price">${p.price}</span>`);
-  tipList.forEach(t => {
+  const tipChips = tipList.map(t => {
     const label = t === "SPECIAL" ? "Joystick" : t;
-    tags.push(
-      `<button type="button" class="tag tips${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')" title="Filter by ${label}">${label}</button>`
-    );
-  });
-  const meta = tags.length
-    ? `<div class="product-meta">${tags.join("")}</div>`
-    : "";
+    return `<button type="button" class="tag tips${activeTipFilter === t ? " tip-active" : ""}" data-tip="${t}" onclick="filterByTip('${t}')" title="Filter by ${label}">${label}</button>`;
+  }).join("");
   const dataTips = tipList.length ? ` data-tips="${tipList.join(",")}"` : "";
   const watts = parsePower(p.power);
   const dataPower = watts > 0 ? ` data-power="${watts}"` : "";
   const psuSpec = parsePsuSpec(p);
   const dataVolts = psuSpec.volts > 0 ? ` data-volts="${psuSpec.volts}"` : "";
   const dataAmps = psuSpec.amps > 0 ? ` data-amps="${psuSpec.amps}"` : "";
-  return `<div class="product-card"${dataTips}${dataPower}${dataVolts}${dataAmps}>
-    <div class="product-thumb">
-      ${getProductThumb(p)}
-    </div>
-    <div class="product-body">
-      <div class="product-brand">${p.brand || p.sub_category || ""}</div>
-      <div class="product-name">${name || p.model || p.sub_category}</div>
-      ${meta}
-      ${
-        p.link
-          ? `<a class="product-link" href="${p.link}" target="_blank" rel="noopener">More Details →</a>`
-          : ""
-      }
-    </div>
-  </div>`;
+
+  const esd = (p.ESD || p.esd || "").toLowerCase();
+  let esdHtml = "—";
+  if (esd === "ok") esdHtml = `<span class="tag esd-ok">OK</span>`;
+  else if (esd === "carefull" || esd === "careful") esdHtml = `<span class="tag esd-carefull">Careful</span>`;
+  else if (esd === "danger") esdHtml = `<span class="tag esd-danger">Risk</span>`;
+
+  const link = p.link
+    ? `<a class="product-link product-link-ali" href="${p.link}" target="_blank" rel="noopener">AliExpress</a>`
+    : "";
+  const bg = p.banggood
+    ? `<a class="product-link product-link-bg" href="${p.banggood}" target="_blank" rel="noopener">Banggood</a>`
+    : "";
+  const links = [link, bg].filter(Boolean).join(" ");
+
+  // Compact thumb — hover shows enlarged image (see bindImageZoom)
+  const thumb = p.image
+    ? `<span class="row-thumb-wrap">
+         <img src="${p.image}" alt="" class="row-thumb" loading="lazy" data-zoom-src="${String(p.image).replace(/"/g, "&quot;")}" onerror="this.style.visibility='hidden'">
+       </span>`
+    : `<span class="row-thumb-placeholder">·</span>`;
+
+  return `<tr class="product-card product-row"${dataTips}${dataPower}${dataVolts}${dataAmps}>
+    <td class="col-thumb">${thumb}</td>
+    <td class="col-name">
+      <div class="product-brand">${p.brand || ""}</div>
+      <div class="product-name">${name || p.model || p.sub_category || "—"}</div>
+    </td>
+    <td class="col-power">${p.power ? `<span class="tag power">${p.power}</span>` : "—"}</td>
+    <td class="col-price">${p.price ? `<span class="tag price">${p.price}</span>` : "—"}</td>
+    <td class="col-tips">${tipChips || "—"}</td>
+    <td class="col-esd">${esdHtml}</td>
+    <td class="col-link">${links || "—"}</td>
+  </tr>`;
 }
 
 function section(title, items, note, group, subgroup) {
@@ -979,17 +1421,41 @@ function section(title, items, note, group, subgroup) {
   }
   let html = `<div class="section-title">${title} <span style="color:var(--muted);font-weight:400;font-size:0.9rem">(${items.length})</span></div>`;
   if (note) html += `<div class="note">${note}</div>`;
-  html += `<div class="product-grid">${items.map(productCard).join("")}</div>`;
+  html += `<div class="product-table-wrap product-list" data-product-list="1">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th class="col-thumb"></th>
+          <th class="col-name">Product</th>
+          <th class="col-power">Power</th>
+          <th class="col-price">Price</th>
+          <th class="col-tips">Tip / Compat</th>
+          <th class="col-esd">ESD</th>
+          <th class="col-link">Buy</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${items.map(productCard).join("")}
+      </tbody>
+    </table>
+  </div>`;
   if (group || subgroup) {
     return `<div class="result-group"${attrStr}>${html}</div>`;
   }
   return html;
 }
 
-/** Category chips: groups = [{ id, label }] */
-function categoryChipBarHTML(groups, activeId) {
-  const active = activeId || "all";
-  let chips = `<button type="button" class="cat-chip${active === "all" ? " cat-active" : ""}" data-group="all" onclick="filterResultGroup('all')">All</button>`;
+/** Category chips: groups = [{ id, label }], opts = { showAll: true, activeId } */
+function categoryChipBarHTML(groups, activeId, opts) {
+  const options = typeof activeId === "object" && activeId !== null && !Array.isArray(activeId)
+    ? activeId
+    : (opts || {});
+  const showAll = options.showAll !== false;
+  const active = (typeof activeId === "string" ? activeId : null) || options.activeId || "all";
+  let chips = "";
+  if (showAll) {
+    chips += `<button type="button" class="cat-chip${active === "all" ? " cat-active" : ""}" data-group="all" onclick="filterResultGroup('all')">All</button>`;
+  }
   (groups || []).forEach(g => {
     chips += `<button type="button" class="cat-chip${active === g.id ? " cat-active" : ""}" data-group="${g.id}" onclick="filterResultGroup('${g.id}')">${g.label}</button>`;
   });
@@ -1000,9 +1466,14 @@ function categoryChipBarHTML(groups, activeId) {
 }
 
 /** Secondary chips (e.g. console name under Parts) — hidden until parent category is active */
-function subChipBarHTML(parentGroup, label, items, activeId) {
-  const active = activeId || "all";
-  let chips = `<button type="button" class="sub-chip${active === "all" ? " cat-active" : ""}" data-sub="all" onclick="filterResultSubgroup('all')">All</button>`;
+function subChipBarHTML(parentGroup, label, items, activeId, opts) {
+  const options = opts || {};
+  const showAll = options.showAll !== false;
+  const active = activeId || (showAll ? "all" : (items && items[0] ? items[0].id : "all"));
+  let chips = "";
+  if (showAll) {
+    chips += `<button type="button" class="sub-chip${active === "all" ? " cat-active" : ""}" data-sub="all" onclick="filterResultSubgroup('all')">All</button>`;
+  }
   (items || []).forEach(g => {
     chips += `<button type="button" class="sub-chip${active === g.id ? " cat-active" : ""}" data-sub="${g.id}" onclick="filterResultSubgroup('${g.id}')">${g.label}</button>`;
   });
@@ -1013,31 +1484,43 @@ function subChipBarHTML(parentGroup, label, items, activeId) {
 }
 
 /** Power chips for hot air */
-function powerChipBarHTML() {
-  return `<div class="power-chip-bar" id="power-chip-bar" style="display:none">
+function powerChipBarHTML(opts) {
+  const options = opts || {};
+  const showAll = options.showAll !== false;
+  const alwaysShow = options.alwaysShow === true;
+  const style = alwaysShow ? 'style="display:flex"' : 'style="display:none"';
+  let chips = "";
+  if (showAll) {
+    chips += `<button type="button" class="power-chip cat-active" data-power="all" onclick="filterByPower('all')">All</button>`;
+  }
+  chips += `<button type="button" class="power-chip" data-power="1000" onclick="filterByPower('1000')">~1000W</button>`;
+  chips += `<button type="button" class="power-chip" data-power="over1000" onclick="filterByPower('over1000')">1000–1300W</button>`;
+  chips += `<button type="button" class="power-chip" data-power="over1300" onclick="filterByPower('over1300')">1300W+</button>`;
+  return `<div class="power-chip-bar" id="power-chip-bar" ${style}>
     <span class="tip-chip-label">Power:</span>
-    <div class="tip-chip-row">
-      <button type="button" class="power-chip cat-active" data-power="all" onclick="filterByPower('all')">All</button>
-      <button type="button" class="power-chip" data-power="1000" onclick="filterByPower('1000')">~1000W</button>
-      <button type="button" class="power-chip" data-power="over1000" onclick="filterByPower('over1000')">1000–1300W</button>
-      <button type="button" class="power-chip" data-power="over1300" onclick="filterByPower('over1300')">1300W+</button>
-    </div>
+    <div class="tip-chip-row">${chips}</div>
   </div>`;
 }
 
 /** PSU voltage + current filters */
-function psuFilterBarHTML() {
-  return `<div class="psu-chip-bar" id="psu-chip-bar" style="display:none">
+function psuFilterBarHTML(opts) {
+  const options = opts || {};
+  const showAll = options.showAll !== false;
+  const alwaysShow = options.alwaysShow === true;
+  const style = alwaysShow ? 'style="display:flex"' : 'style="display:none"';
+  const vAll = showAll ? `<button type="button" class="psu-chip cat-active" data-psu-v="all" onclick="filterByPsuV('all')">All</button>` : "";
+  const aAll = showAll ? `<button type="button" class="psu-chip cat-active" data-psu-a="all" onclick="filterByPsuA('all')">All</button>` : "";
+  return `<div class="psu-chip-bar" id="psu-chip-bar" ${style}>
     <span class="tip-chip-label">Voltage:</span>
     <div class="tip-chip-row">
-      <button type="button" class="psu-chip cat-active" data-psu-v="all" onclick="filterByPsuV('all')">All</button>
+      ${vAll}
       <button type="button" class="psu-chip" data-psu-v="30" onclick="filterByPsuV('30')">≤30V</button>
       <button type="button" class="psu-chip" data-psu-v="60" onclick="filterByPsuV('60')">≤60V</button>
       <button type="button" class="psu-chip" data-psu-v="high" onclick="filterByPsuV('high')">60V+</button>
     </div>
     <span class="tip-chip-label">Current:</span>
     <div class="tip-chip-row">
-      <button type="button" class="psu-chip cat-active" data-psu-a="all" onclick="filterByPsuA('all')">All</button>
+      ${aAll}
       <button type="button" class="psu-chip" data-psu-a="5" onclick="filterByPsuA('5')">≤5A</button>
       <button type="button" class="psu-chip" data-psu-a="10" onclick="filterByPsuA('10')">5–10A</button>
       <button type="button" class="psu-chip" data-psu-a="high" onclick="filterByPsuA('high')">10A+</button>
@@ -1098,7 +1581,7 @@ const USE_CASE_TIPS = {
 };
 const NO_TIP_USE_CASES = ["batteries"];
 /** Always selectable (never greyed out by use-case) if products exist */
-const ALWAYS_AVAILABLE_GROUPS = ["measure", "psu"];
+const ALWAYS_AVAILABLE_GROUPS = ["measure", "psu", "practice", "hotair", "spotwelder", "stripes", "consumables", "tips", "handles"];
 
 /** Groups allowed under current use-case (null = all) */
 function allowedGroups() {
@@ -1219,13 +1702,24 @@ function updateSecondaryFilterBars() {
 
   const powerBar = document.getElementById("power-chip-bar");
   if (powerBar) {
-    const active = activeResultGroup === "hotair";
-    powerBar.style.display = "flex";
+    const forced = powerBar.style.display === "flex" && powerBar.querySelectorAll(".power-chip").length &&
+      !document.querySelector('.result-group[data-group]:not([data-group="hotair"])');
+    // Active when Hot air category selected, or this page only has hot-air products
+    const onlyHotair = [...document.querySelectorAll(".result-group[data-group]")].every(
+      el => (el.getAttribute("data-group") || "") === "hotair"
+    );
+    const active = activeResultGroup === "hotair" || onlyHotair;
+    if (powerBar.getAttribute("style") && powerBar.style.display === "none" && !onlyHotair) {
+      /* keep hidden if not injected as alwaysShow */
+    } else {
+      powerBar.style.display = "flex";
+    }
     powerBar.classList.toggle("bar-inactive", !active);
     powerBar.querySelectorAll(".power-chip").forEach(btn => {
       btn.disabled = !active;
       if (active) {
-        btn.classList.toggle("cat-active", (btn.getAttribute("data-power") || "") === activePowerFilter);
+        const p = btn.getAttribute("data-power") || "";
+        btn.classList.toggle("cat-active", p === activePowerFilter || (activePowerFilter === "all" && p === "all"));
       }
     });
   }
@@ -1283,7 +1777,13 @@ function filterResultGroup(group) {
   const btn = document.querySelector(`.cat-chip[data-group="${next}"]`);
   if (btn && btn.classList.contains("cat-disabled") && next !== "all") return;
 
-  activeResultGroup = next;
+  // No "All" chip: click active group again to show everything
+  const hasAll = !!document.querySelector('.cat-chip[data-group="all"]');
+  if (!hasAll && activeResultGroup === next && next !== "all") {
+    activeResultGroup = "all";
+  } else {
+    activeResultGroup = next;
+  }
   activeResultSubgroup = "all";
   activePowerFilter = "all";
   // Do NOT reset use-case — category works inside the use-case
@@ -1310,18 +1810,25 @@ function filterResultGroup(group) {
   // no scroll on category filter — prevents menu jump
 }
 
-/** Move matching (non-dimmed) product cards to the front of each grid — all menus */
+/** Reorder matching rows to the top of each table body (do not break <table> structure) */
 function reorderProductCards() {
   const dimClasses = ["tip-dimmed", "psu-dimmed", "power-dimmed", "use-dimmed"];
-  document.querySelectorAll(".product-grid").forEach(grid => {
-    const cards = [...grid.querySelectorAll(".product-card")];
-    if (cards.length < 2) return;
-    const isDimmed = card => dimClasses.some(c => card.classList.contains(c));
-    const active = cards.filter(c => !isDimmed(c));
-    const dimmed = cards.filter(c => isDimmed(c));
-    // Re-append: matches first, greyed last
-    active.forEach(c => grid.appendChild(c));
-    dimmed.forEach(c => grid.appendChild(c));
+  document.querySelectorAll(".product-table tbody, .product-list, .product-grid").forEach(container => {
+    // Prefer tbody so <tr> stay inside the table
+    const parent = container.tagName === "TBODY"
+      ? container
+      : (container.querySelector("tbody") || container);
+    const cards = [...parent.querySelectorAll(":scope > .product-card, :scope > tr.product-card")];
+    // If cards are nested deeper (legacy grid), fall back
+    const list = cards.length ? cards : [...parent.querySelectorAll(".product-card")];
+    if (list.length < 2) return;
+    // Only reorder if every card is a direct child (safe to move)
+    if (!list.every(c => c.parentElement === parent)) return;
+    const isDimmed = card => dimClasses.some(c => card.classList.contains(c)) || card.style.display === "none";
+    const active = list.filter(c => !isDimmed(c));
+    const dimmed = list.filter(c => isDimmed(c));
+    active.forEach(c => parent.appendChild(c));
+    dimmed.forEach(c => parent.appendChild(c));
   });
 }
 
@@ -1576,7 +2083,9 @@ function showResults(key) {
   res.classList.add("active");
   document.getElementById("progress").style.width = "100%";
   document.getElementById("restartBtn").classList.add("visible");
+  document.body.classList.remove("home-mode");
   updateBreadcrumb();
+  setCategoryHash(key, _skipHistory ? "none" : "push");
 
   let html = "";
 
@@ -1712,7 +2221,7 @@ function showResults(key) {
       const handles = bySub("handles");
       const tipCodes = collectTipCodes([...stations, ...portables, ...handles]);
 
-      html += `<div class="note" style="margin-bottom:16px">Filters stay at the top. <strong>Recommended for</strong> greys out categories with nothing useful (e.g. no portables for GPU). Tip filter works for station type / compatibility.</div>`;
+      html += `<div class="note" style="margin-bottom:16px">Full tools database. Filters stay at the top — tip system, power, category, and more.</div>`;
       html += `<div class="filter-sticky" id="filter-sticky">`;
       html += useCaseChipBarHTML();
       html += categoryChipBarHTML([
@@ -1727,7 +2236,8 @@ function showResults(key) {
         { id: "psu", label: "Power supplies" },
         { id: "tips", label: "Tips" },
         { id: "handles", label: "Handles" },
-        { id: "consumables", label: "Consumables" }
+        { id: "consumables", label: "Consumables" },
+        { id: "practice", label: "Practice boards" }
       ]);
       html += tipChipBarHTML(tipCodes, "station,portable,tips,handles,iron,all");
       html += powerChipBarHTML();
@@ -1772,11 +2282,165 @@ function showResults(key) {
       html += section("Solder", bySub("solder"), null, "consumables", "solder");
       html += section("Wick", bySub("wick"), null, "consumables", "wick");
       html += section("Desoldering pumps", bySub("pump"), null, "consumables", "pump");
+      html += section("Practice kits / boards", bySub("practice"), "Training PCBs for soldering practice.", "practice");
+
       // After render, mark unavailable categories for default "All"
       setTimeout(() => {
         updateCategoryChipAvailability();
         updateSecondaryFilterBars();
       }, 0);
+      break;
+    }
+
+    // --- Category database views (from visual menu) ---
+    case "show_soldering_db": {
+      const stations = bySub("station").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const portables = bySub("portable").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      const classicIrons = bySub("iron");
+      const combos = bySub("combo");
+      const tipCodes = collectTipCodes([...stations, ...portables]);
+      html += `<div class="note" style="margin-bottom:16px">Soldering stations · portables · classic irons. Use the filters above to narrow the list.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([
+        { id: "station", label: "Stations" },
+        { id: "portable", label: "Portable" },
+        { id: "iron", label: "900M irons" },
+        { id: "combo", label: "Combo" }
+      ], null, { showAll: false });
+      html += tipChipBarHTML(tipCodes, "station,portable,iron,combo,all");
+      html += `</div>`;
+      html += section("Soldering stations", stations, "Tip filters apply.", "station");
+      html += section("Portable irons", portables, null, "portable");
+      html += section("Classic 900M irons", classicIrons, null, "iron");
+      html += section("2-in-1 combos", combos, null, "combo");
+      setTimeout(() => { updateCategoryChipAvailability(); updateSecondaryFilterBars(); updateTipChipAvailability(); }, 0);
+      break;
+    }
+    case "show_hotair_db": {
+      const hotairs = bySub("hotair").slice().sort((a, b) => parsePower(b.power) - parsePower(a.power));
+      html += `<div class="note" style="margin-bottom:16px">Hot air stations for SMD / BGA rework. Filter by power above.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([{ id: "hotair", label: "Hot air" }], null, { showAll: false });
+      html += powerChipBarHTML({ showAll: false, alwaysShow: true });
+      html += `</div>`;
+      html += section("Hot air stations", hotairs, "Filter by power when needed.", "hotair");
+      setTimeout(() => {
+        activeResultGroup = "hotair";
+        document.querySelectorAll(".cat-chip[data-group]").forEach(b => {
+          b.classList.toggle("cat-active", (b.getAttribute("data-group") || "") === "hotair");
+        });
+        updateCategoryChipAvailability();
+        updateSecondaryFilterBars();
+      }, 0);
+      break;
+    }
+    case "show_tips_handles_db": {
+      const tips = bySub("tips");
+      const handles = bySub("handles");
+      const tipCodes = collectTipCodes([...tips, ...handles]);
+      html += `<div class="note" style="margin-bottom:16px">Tips & handles database. Filter by tip system (C245, C210, T12…).</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([
+        { id: "tips", label: "Tips" },
+        { id: "handles", label: "Handles" }
+      ], null, { showAll: false });
+      html += tipChipBarHTML(tipCodes.length ? tipCodes : ["C245","C210","C115","T12","900M","C470"], "tips,handles,all");
+      html += `</div>`;
+      html += section("Tips", tips.filter(p => (p.model || "").toLowerCase() !== "joystick"), null, "tips");
+      html += section("Joystick tips (Special)", allJoystickTips(), "Shaped tips for console sticks. Filter → Special.", "tips");
+      html += section("Handles", handles, null, "handles");
+      setTimeout(() => { updateCategoryChipAvailability(); updateSecondaryFilterBars(); updateTipChipAvailability(); }, 0);
+      break;
+    }
+    case "show_measure_db": {
+      html += `<div class="note" style="margin-bottom:16px">Measurement tools database. Filter by type above.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([{ id: "measure", label: "Measurement" }], null, { showAll: false });
+      html += subChipBarHTML("measure", "Type", [
+        { id: "multimeter", label: "Multimeter" },
+        { id: "oscilloscope", label: "Oscilloscope" },
+        { id: "milliohm", label: "Milliohm" },
+        { id: "lcr", label: "LCR" },
+        { id: "battery_tester", label: "Battery tester" }
+      ], "all", { showAll: true });
+      html += `</div>`;
+      html += section("Multimeters", bySubAny("multimeter"), null, "measure", "multimeter");
+      html += section("Oscilloscopes", bySubAny("oscilloscope"), null, "measure", "oscilloscope");
+      html += section("Milliohm meters", bySubAny("milliohm"), null, "measure", "milliohm");
+      html += section("LCR meters", bySubAny("lcr"), null, "measure", "lcr");
+      html += section("Battery testers", bySubAny("battery_tester"), null, "measure", "battery_tester");
+      setTimeout(() => {
+        activeResultGroup = "measure";
+        document.querySelectorAll(".cat-chip[data-group]").forEach(b => {
+          b.classList.toggle("cat-active", (b.getAttribute("data-group") || "") === "measure");
+        });
+        updateCategoryChipAvailability();
+        updateSecondaryFilterBars();
+      }, 0);
+      break;
+    }
+    case "show_psu_db": {
+      const psus = bySubAny("psu");
+      html += `<div class="note" style="margin-bottom:16px">Bench power supply database. Filter by voltage / current above.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([{ id: "psu", label: "Power supplies" }], null, { showAll: false });
+      html += psuFilterBarHTML({ showAll: false, alwaysShow: true });
+      html += `</div>`;
+      html += section("Power supplies", psus, "Use V / A chips above.", "psu");
+      setTimeout(() => {
+        activeResultGroup = "psu";
+        document.querySelectorAll(".cat-chip[data-group]").forEach(b => {
+          b.classList.toggle("cat-active", (b.getAttribute("data-group") || "") === "psu");
+        });
+        updateCategoryChipAvailability();
+        updateSecondaryFilterBars();
+      }, 0);
+      break;
+    }
+    case "show_consumables_db": {
+      html += `<div class="note" style="margin-bottom:16px">Consumables database — flux, solder, wick, pumps.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([{ id: "consumables", label: "Consumables" }], null, { showAll: false });
+      html += subChipBarHTML("consumables", "Type", [
+        { id: "flux", label: "Flux" },
+        { id: "solder", label: "Solder" },
+        { id: "wick", label: "Wick" },
+        { id: "pump", label: "Pump" }
+      ], "all", { showAll: false });
+      html += `</div>`;
+      html += section("Flux", bySub("flux"), null, "consumables", "flux");
+      html += section("Solder", bySub("solder"), null, "consumables", "solder");
+      html += section("Wick", bySub("wick"), null, "consumables", "wick");
+      html += section("Desoldering pumps", bySub("pump"), null, "consumables", "pump");
+      setTimeout(() => { updateCategoryChipAvailability(); updateSecondaryFilterBars(); }, 0);
+      break;
+    }
+    case "show_practice_db": {
+      const boards = filterProducts(p => {
+        const sub = (p.sub_category || "").toLowerCase();
+        const text = `${p.brand || ""} ${p.model || ""} ${p.compatibility || ""} ${sub}`.toLowerCase();
+        return sub === "practice" || sub === "practice_board" || sub === "training" ||
+          /practice\s*board|training\s*pcb|solder\s*practice|练习/.test(text);
+      });
+      html += `<div class="note" style="margin-bottom:16px">Practice kits &amp; training PCBs for learning soldering. Share this page: <code>#practice</code></div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([{ id: "practice", label: "Practice boards" }], null, { showAll: false });
+      html += `</div>`;
+      html += section("Practice kits", boards, "AliExpress + Banggood links on each row.", "practice");
+      setTimeout(() => { updateCategoryChipAvailability(); updateSecondaryFilterBars(); }, 0);
+      break;
+    }
+    case "show_spotwelder_db": {
+      html += `<div class="note" style="margin-bottom:16px">Spot welder & nickel strip database.</div>`;
+      html += `<div class="filter-sticky" id="filter-sticky">`;
+      html += categoryChipBarHTML([
+        { id: "spotwelder", label: "Spot welder" },
+        { id: "stripes", label: "Nickel strips" }
+      ], null, { showAll: false });
+      html += `</div>`;
+      html += section("Spot welders", bySub("spotwelder"), null, "spotwelder");
+      html += section("Nickel strips", bySub("stripes"), null, "stripes");
+      setTimeout(() => { updateCategoryChipAvailability(); updateSecondaryFilterBars(); }, 0);
       break;
     }
 
@@ -2646,8 +3310,43 @@ function showResults(key) {
       break;
 
 
-    default:
-      html += `<div class="card"><p>No specific recommendations for this path yet.</p></div>`;
+    default: {
+      // Dynamic menus from menus.json: show_menu_{id}
+      if (String(key).startsWith("show_menu_")) {
+        const menuId = String(key).replace(/^show_menu_/, "");
+        const menu = (MENUS.main_menus || []).find(m => m.id === menuId);
+        const subs = (menu && menu.subs) || [];
+        const items = subs.length
+          ? filterProducts(p => subs.includes(p.sub_category))
+          : [];
+        html += `<div class="note" style="margin-bottom:16px">${menu ? (menu.desc || menu.label || "") : "Category"} · share <code>#${menuId}</code></div>`;
+        const chips = subs.map(s => {
+          const sc = (MENUS.sub_categories || []).find(x => x.id === s);
+          return { id: s, label: (sc && sc.label) || s };
+        });
+        if (chips.length) {
+          html += `<div class="filter-sticky" id="filter-sticky">`;
+          html += categoryChipBarHTML(chips, null, { showAll: chips.length > 1 });
+          html += `</div>`;
+        }
+        if (!items.length) {
+          html += `<div class="empty-msg">No products in this menu yet. Assign sub-categories in Admin → Main menus.</div>`;
+        } else if (chips.length <= 1) {
+          html += section(menu ? menu.label : menuId, items, null, subs[0] || menuId);
+        } else {
+          chips.forEach(c => {
+            html += section(c.label, items.filter(p => p.sub_category === c.id), null, c.id);
+          });
+        }
+        setTimeout(() => {
+          updateCategoryChipAvailability();
+          updateSecondaryFilterBars();
+        }, 0);
+      } else {
+        html += `<div class="card"><p>No specific recommendations for this path yet.</p></div>`;
+      }
+      break;
+    }
   }
 
   html += `<div class="nav-buttons" style="margin-top:32px">
@@ -2655,19 +3354,21 @@ function showResults(key) {
     <button class="btn btn-primary" onclick="restart()">Start Over</button>
   </div>`;
 
-  res.innerHTML = html;
-  scrollToFilters();
+  try {
+    if (RESULT_TO_HASH[key] && typeof shareCategoryBarHTML === "function") {
+      html = shareCategoryBarHTML(key) + html;
+    }
+  } catch (e) {
+    console.warn("share bar skipped", e);
+  }
+  res.innerHTML = html || `<div class="empty-msg">Nothing to show for this category.</div>`;
+  try { scrollToFilters(); } catch (e) {}
+  try { bindImageZoom(res); } catch (e) { console.warn("zoom bind", e); }
 }
 
 function restart() {
-  path = [];
-  answers = {};
   activeTipFilter = null;
-  document.getElementById("results").classList.remove("active");
-  document.getElementById("results").innerHTML = "";
-  showMain();
-  renderQuestion("start");
-  window.scrollTo(0, 0);
+  goHomeView(false);
 }
 
 // ========== ABOUT / CONTACT ==========
@@ -2824,13 +3525,17 @@ function runSearch(query) {
   if (items.length === 0) {
     html += `<div class="empty-msg">No products matched. Try a brand, model, or category (e.g. <em>FNIRSI</em>, <em>multimeter</em>, <em>C245</em>, <em>psu</em>).</div>`;
   } else {
-    html += `<div class="product-grid">${items.map(productCard).join("")}</div>`;
+    html += `<div class="product-table-wrap product-list"><table class="product-table"><thead><tr>
+      <th class="col-thumb"></th><th class="col-name">Product</th><th class="col-power">Power</th>
+      <th class="col-price">Price</th><th class="col-tips">Tip / Compat</th><th class="col-esd">ESD</th><th class="col-link">Buy</th>
+    </tr></thead><tbody>${items.map(productCard).join("")}</tbody></table></div>`;
   }
   html += `<div class="nav-buttons" style="margin-top:32px">
     <button class="btn btn-secondary" onclick="clearSearch()">← Clear search</button>
     <button class="btn btn-primary" onclick="restart()">Start Over</button>
   </div>`;
   res.innerHTML = html;
+  try { bindImageZoom(res); } catch (e) {}
 
   const bc = document.getElementById("breadcrumb");
   if (bc) bc.innerHTML = `Search: ${escapeHtml(query)}`;
@@ -2845,5 +3550,28 @@ function escapeHtml(s) {
 }
 
 
-// Boot
+// Boot — browser Back/Forward uses history stack
+window.addEventListener("popstate", () => {
+  if (!PRODUCTS.length) return;
+  const key = (history.state && history.state.view && history.state.view !== "home")
+    ? (RESULT_TO_HASH[history.state.view] ? history.state.view : CATEGORY_ROUTES[history.state.view] || getRouteFromHash())
+    : getRouteFromHash();
+  if (key && key !== "home") {
+    path = [{ node: "start", label: "Back" }];
+    answers = { cat: key };
+    _skipHistory = true;
+    try { showResults(key); } finally { _skipHistory = false; }
+  } else {
+    goHomeView(true);
+  }
+});
+
+window.addEventListener("hashchange", () => {
+  // Fallback when only hash changes (external links)
+  if (!PRODUCTS.length) return;
+  if (_skipHistory) return;
+  if (getRouteFromHash()) openRouteFromHash();
+  else goHomeView(true);
+});
+
 loadData();
