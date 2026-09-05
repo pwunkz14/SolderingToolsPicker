@@ -2627,5 +2627,115 @@
     "price": "$5-20",
     "compatibility": "Modding",
     "ESD": "OK"
+  },
+  {
+    "id": 240,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 1",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 241,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 2",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 242,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 3",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 243,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 4",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 244,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 5",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 245,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 6",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 246,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 7",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 247,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 8",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 248,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 9",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
+  },
+  {
+    "id": 249,
+    "category": "tools",
+    "sub_category": "practice",
+    "brand": "Practice",
+    "model": "Practice Kit 10",
+    "power": "",
+    "price": "$5-25",
+    "compatibility": "TRAINING",
+    "ESD": "OK"
   }
 ]

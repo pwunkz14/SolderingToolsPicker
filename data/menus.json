@@ -1,0 +1,135 @@
+{
+  "tip_compat": [
+    { "code": "1.1", "label": "C245 only", "tips": ["C245"] },
+    { "code": "1.2", "label": "T12 only", "tips": ["T12"] },
+    { "code": "1.3", "label": "900M only", "tips": ["900M"] },
+    { "code": "1.4", "label": "C210 only", "tips": ["C210"] },
+    { "code": "1.5", "label": "C115 only", "tips": ["C115"] },
+    { "code": "1.6", "label": "C470 only", "tips": ["C470"] },
+    { "code": "3", "label": "C245 + C210", "tips": ["C245", "C210"] },
+    { "code": "9", "label": "C245 + T12", "tips": ["C245", "T12"] },
+    { "code": "7", "label": "C210 + C115 (micro)", "tips": ["C210", "C115"] },
+    { "code": "8", "label": "C245 + C210 + C115", "tips": ["C245", "C210", "C115"] },
+    { "code": "4", "label": "C245 + C210 + C115 + T12 (multi)", "tips": ["C245", "C210", "C115", "T12"] },
+    { "code": "6", "label": "C470 + C245 + C210 + C115", "tips": ["C470", "C245", "C210", "C115"] },
+    { "code": "5", "label": "Full: C470 + C245 + C210 + C115 + T12", "tips": ["C470", "C245", "C210", "C115", "T12"] },
+    { "code": "TRAINING", "label": "Training / practice (no tip system)", "tips": [] },
+    { "code": "SPECIAL", "label": "Special / Joystick tips", "tips": ["SPECIAL"] },
+    { "code": "", "label": "— None / not applicable —", "tips": [] }
+  ],
+  "sub_categories": [
+    { "id": "station", "label": "Soldering station", "category": "tools" },
+    { "id": "portable", "label": "Portable iron", "category": "tools" },
+    { "id": "iron", "label": "Classic 900M iron", "category": "tools" },
+    { "id": "hotair", "label": "Hot air station", "category": "tools" },
+    { "id": "combo", "label": "2-in-1 combo", "category": "tools" },
+    { "id": "tips", "label": "Tips", "category": "tools" },
+    { "id": "handles", "label": "Handles", "category": "tools" },
+    { "id": "flux", "label": "Flux", "category": "tools" },
+    { "id": "solder", "label": "Solder wire", "category": "tools" },
+    { "id": "wick", "label": "Desoldering wick", "category": "tools" },
+    { "id": "pump", "label": "Desoldering pump", "category": "tools" },
+    { "id": "spotwelder", "label": "Spot welder", "category": "tools" },
+    { "id": "stripes", "label": "Nickel strips", "category": "tools" },
+    { "id": "multimeter", "label": "Multimeter", "category": "tools" },
+    { "id": "oscilloscope", "label": "Oscilloscope", "category": "tools" },
+    { "id": "milliohm", "label": "Milliohm meter", "category": "tools" },
+    { "id": "lcr", "label": "LCR meter", "category": "tools" },
+    { "id": "battery_tester", "label": "Battery tester", "category": "tools" },
+    { "id": "psu", "label": "Power supply", "category": "tools" },
+    { "id": "practice", "label": "Practice kit / board", "category": "tools" },
+    { "id": "PS5", "label": "PS5 parts", "category": "parts" },
+    { "id": "PS4", "label": "PS4 parts", "category": "parts" },
+    { "id": "XBOX", "label": "Xbox parts", "category": "parts" },
+    { "id": "Switch", "label": "Switch parts", "category": "parts" },
+    { "id": "Switch pro", "label": "Switch Pro parts", "category": "parts" },
+    { "id": "GameBoy", "label": "Game Boy / GBA", "category": "parts" },
+    { "id": "battery", "label": "Battery / cells", "category": "parts" },
+    { "id": "other", "label": "Other parts", "category": "parts" }
+  ],
+  "main_menus": [
+    {
+      "id": "soldering",
+      "label": "Soldering Stations & Irons",
+      "desc": "Stations, portable & classic irons",
+      "image": "images/products/1.jpg",
+      "subs": ["station", "portable", "iron", "combo"],
+      "enabled": true
+    },
+    {
+      "id": "hotair",
+      "label": "Hot Air Stations",
+      "desc": "SMD / BGA rework stations",
+      "image": "images/products/53.png",
+      "subs": ["hotair"],
+      "enabled": true
+    },
+    {
+      "id": "tips_handles",
+      "label": "Tips & Handles",
+      "desc": "C245, C210, T12, 900M & more",
+      "image": "images/products/30.jpg",
+      "subs": ["tips", "handles"],
+      "enabled": true
+    },
+    {
+      "id": "measure",
+      "label": "Measurement Tools",
+      "desc": "Multimeters, scopes, LCR, milliohm",
+      "image": "images/products/164.png",
+      "subs": ["multimeter", "oscilloscope", "milliohm", "lcr", "battery_tester"],
+      "enabled": true
+    },
+    {
+      "id": "psu",
+      "label": "Power Supplies",
+      "desc": "Bench lab power supplies",
+      "image": "images/products/188.jpg",
+      "subs": ["psu"],
+      "enabled": true
+    },
+    {
+      "id": "consumables",
+      "label": "Consumables",
+      "desc": "Flux, solder wire, wick, pumps",
+      "image": "images/products/119.jpg",
+      "subs": ["flux", "solder", "wick", "pump"],
+      "enabled": true
+    },
+    {
+      "id": "spotwelder",
+      "label": "Spot Welders",
+      "desc": "Machines & nickel strips",
+      "image": "images/products/181.jpg",
+      "subs": ["spotwelder", "stripes"],
+      "enabled": true
+    },
+    {
+      "id": "practice",
+      "label": "Practice Boards",
+      "desc": "Training PCBs for soldering practice",
+      "image": "images/products/243.jpg",
+      "subs": ["practice"],
+      "enabled": true
+    },
+    {
+      "id": "repairs",
+      "label": "Repairs & Parts",
+      "desc": "PS5, PS4, Game Boy, batteries, screens",
+      "image": "images/products/18.jpg",
+      "subs": ["PS5", "PS4", "XBOX", "Switch", "Switch pro", "GameBoy", "battery"],
+      "enabled": true,
+      "special": "repairs"
+    },
+    {
+      "id": "all",
+      "label": "All Tools",
+      "desc": "Full catalog · every filter",
+      "image": "",
+      "icon": "🗄️",
+      "subs": [],
+      "enabled": true,
+      "special": "all_tools"
+    }
+  ]
+}
