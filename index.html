@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soldering Tools Picker</title>
+  <title>Tools Database — Soldering, Hot Air, PSU & More</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <nav class="top-nav">
-    <a href="#" class="nav-brand" onclick="showMain(); return false;">🔧 Picker</a>
+    <a href="#" class="nav-brand" onclick="if(typeof goHomeView==='function')goHomeView(false);else showMain(); return false;">ToolsDB</a>
     <div class="nav-search">
       <input type="search" id="siteSearch" placeholder="Search products…" autocomplete="off"
              oninput="onSearchInput(event)" onkeydown="onSearchKey(event)">
@@ -16,15 +16,15 @@
       <button type="button" class="search-go" onclick="runSearch(document.getElementById('siteSearch').value)" title="Search">🔍</button>
     </div>
     <div class="nav-links">
-      <a href="#" id="navHome" class="nav-link active" onclick="showMain(); return false;">Home</a>
+      <a href="#" id="navHome" class="nav-link active" onclick="if(typeof goHomeView==='function')goHomeView(false);else showMain(); return false;">Home</a>
       <a href="#" id="navAbout" class="nav-link" onclick="showAbout(); return false;">About</a>
     </div>
   </nav>
 
   <div class="container" id="main-view">
     <header>
-      <h1>🔧 Soldering Tools Solutions</h1>
-      <p></p>
+      <h1>Tools Database</h1>
+      <p class="site-tagline">Electronics repair tools catalog · filter by category, tip system & power</p>
     </header>
 
     <div class="progress-bar">
